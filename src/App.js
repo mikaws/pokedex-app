@@ -1,6 +1,8 @@
+import Pokeball from "./Components/Pokeball/Pokeball";
+
 function App() {
   return (
-    <h1>Hello World</h1>
+    <Pokeball/>
   );
 }
 
