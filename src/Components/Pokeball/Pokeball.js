@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled, { keyframes } from 'styled-components'
+import fetchKantoPokemon from '../../fetch';
 
 const spandAndRotate = keyframes`
   0% {
@@ -10,7 +11,7 @@ const spandAndRotate = keyframes`
   }
 `
 
-const openPokeball = keyframes`
+const alignToOpen = keyframes`
   0% {
     transform: rotate(0) scale(1.1);
   }
@@ -19,16 +20,43 @@ const openPokeball = keyframes`
   }
 `
 
+const openPokeballToLeft = keyframes`
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-500px);
+  }
+`
+
+const openPokeballToRight = keyframes`
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(500px);
+  }
+`
+
+const displayScreen = keyframes`
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+`
+
 const Content = styled.div`
   animation-name: ${props => {
-  const isClicked = props.isClicked
+    const isClicked = props.isClicked
 
-  if (isClicked === true) {
-    return openPokeball;
-  } else {
-    return spandAndRotate;
-  }
-}};
+    if (isClicked === true) {
+      return alignToOpen;
+    } else {
+      return spandAndRotate;
+    }
+  }};
   animation-duration: 1.2s;
   padding: 10px;
   transition: 0.5s;
@@ -108,24 +136,115 @@ const PokeballButtonInside = styled.div`
   }
 `;
 
+const HalfLeftCircle = styled.div`
+  animation: ${openPokeballToLeft} 2s;
+  transform:  translateX(-500px);
+  display: flex;
+  align-items: center;
+  justify-content: right;
+  float: left;
+  width: 315px;
+  height: 630px;
+  margin: 0 30px;
+  background: var(--pokeball-inactive);
+  border-radius: 630px 0 0 630px;
+`;
+
+const HalfRightCircle = styled.div`
+  animation: ${openPokeballToRight} 2s;
+  transform:  translateX(500px);
+  display: flex;
+  align-items: center;
+  justify-content: left;
+  float: right;
+  width: 315px;
+  height: 630px;
+  margin: 0 30px;
+  background: var(--pokeball-inactive);
+  border-radius: 0 630px 630px 0;
+`;
+
+const HalfLeftInsideCircle = styled.div`
+  float: left;
+  width: 100px;
+  height: 230px;
+  margin: 0 -1px;
+  background: var(--background);
+  border-radius: 230px 0 0 230px;
+`;
+
+const HalfRightInsideCircle = styled.div`
+  float: right;
+  width: 100px;
+  height: 230px;
+  margin: 0 -1px;
+  background: var(--background);
+  border-radius: 0 230px 230px 0;
+`;
+
+const PokedexContainer = styled.div` 
+  position: absolute;
+  margin: 0 -125px;
+  width: 1000px;
+  height: 630px;
+  background: rgb(59, 172, 172);
+  animation: ${displayScreen} 5s;
+  overflow-y: hidden;
+`
+
 function PokeballIntro() {
 
   const [isClicked, setIsClicked] = useState(false)
+  const [isExpand, setIsExpand] = useState(false)
+  const [pokemonList, setPokemonList] = useState([])
 
   const handleClick = () => {
     setIsClicked(true)
   }
 
+  const fetchData = async () => {
+    const res = await fetchKantoPokemon()
+    setPokemonList(res.results)
+  }
+
+  useEffect(() => {
+    if(isClicked){
+      setTimeout(() => setIsExpand(true), 2000)
+      fetchData()
+    }
+  }, [isClicked])
+  
   return (
-    <Content isClicked={isClicked}>
-      <Pokeball>
-        <PokeballLine />
-          <PokeballButtonOutside>
-            <PokeballButtonInside
-              onClick={() => handleClick()}/>
-          </PokeballButtonOutside>
-        </Pokeball>
-    </Content>
+      <>
+        {isExpand 
+          ? <>
+              <HalfLeftCircle>
+                <HalfLeftInsideCircle/>
+              </HalfLeftCircle>
+              <HalfRightCircle>
+                <HalfRightInsideCircle/>
+              </HalfRightCircle>
+              <PokedexContainer>
+                {pokemonList.map((pokemon,i) => (
+                   <div key={pokemon.name}>
+                    <h6>{pokemon.name}</h6>
+                   </div>
+                ))}
+              </PokedexContainer> 
+            </>
+          : <Content isClicked={isClicked}>
+              <Pokeball>
+              <PokeballLine />
+                <PokeballButtonOutside>
+                  <PokeballButtonInside
+                    onClick={() => handleClick()}/>
+                </PokeballButtonOutside>
+              </Pokeball>
+            </Content>
+        }
+      </>
+      
+    
   );
 }
 
