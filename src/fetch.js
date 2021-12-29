@@ -1,8 +1,10 @@
 const fetchKantoPokemon = async () => {
-  const url = 'https://pokeapi.co/api/v2/pokemon?limit=20'
-  const res = await fetch(url)
-  const data = await res.json()
-  console.log(data)
+  const url = 'https://pokeapi.co/api/v2/pokemon/'
+  let data = []
+  for(let i=1; i<=16; i++){
+    const res = await fetch(url+i)
+    data.push(await res.json())
+  }
   return data
 }
 

@@ -40,9 +40,11 @@ const openPokeballToRight = keyframes`
 
 const displayScreen = keyframes`
   0% {
+    padding: 0;
     opacity: 0;
   }
   100% {
+    border-radius: 10px;
     opacity: 1;
   }
 `
@@ -96,19 +98,20 @@ const Pokeball = styled.div`
   height: 350px;
   width: 350px;
   border-radius: 50%;
-  background-color: var(--pokeball-inactive);
+  background: linear-gradient(to top left, var(--pokeball-center-inactive), rgb(159, 83, 197));
+  
 
   &:hover {
-    background-color: var(--pokeball-active);
-    transition: 2s;
+    transition: 1s ease-in;
+    background: linear-gradient(to top left, var(--pokeball-center-inactive), rgb(240, 83, 197));
   }
 `;
 
 const PokeballLine = styled.div`
   width: 100%;
-  height: 8%;
+  height: 12%;
   background-color: var(--background);
-  transform: rotate(35deg);
+  transform: rotate(36deg);
 `;
 
 const PokeballButtonOutside = styled.div`
@@ -128,11 +131,14 @@ const PokeballButtonInside = styled.div`
   position: absolute;
   border-radius: 50%;
   background-color: var(--pokeball-center-inactive);
+  background-image: linear-gradient(to top left, var(--pokeball-center-inactive), rgb(159, 83, 197));
   transition: 1s;
+  cursor: pointer;
 
   &:hover {
-    background-color: var(--pokeball-center-active);
     transition: 0.5s;
+    background-color: var(--pokeball-center-active);
+    background-image: linear-gradient(to top left, var(--pokeball-center-inactive), rgb(200, 83, 197));
   }
 `;
 
@@ -147,6 +153,7 @@ const HalfLeftCircle = styled.div`
   height: 630px;
   margin: 0 30px;
   background: var(--pokeball-inactive);
+  background-image: linear-gradient(to top left, var(--pokeball-center-inactive), rgb(159, 83, 197));
   border-radius: 630px 0 0 630px;
 `;
 
@@ -161,6 +168,7 @@ const HalfRightCircle = styled.div`
   height: 630px;
   margin: 0 30px;
   background: var(--pokeball-inactive);
+  background-image: linear-gradient(to top right, var(--pokeball-center-inactive), rgb(159, 83, 197));
   border-radius: 0 630px 630px 0;
 `;
 
@@ -173,6 +181,28 @@ const HalfLeftInsideCircle = styled.div`
   border-radius: 230px 0 0 230px;
 `;
 
+const Pokemon = styled.div``
+
+const TextContainer = styled.div`
+  padding: 7.5px;
+  margin: 5px;
+  width: 150px;
+  border-radius: 5px;
+  text-align: center;
+  background-color: black;
+  cursor: pointer;
+  opacity: 0.9;
+
+  &:hover {
+    opacity: 1;
+  }
+
+`
+
+const Text = styled.label`
+  
+`
+
 const HalfRightInsideCircle = styled.div`
   float: right;
   width: 100px;
@@ -182,14 +212,35 @@ const HalfRightInsideCircle = styled.div`
   border-radius: 0 230px 230px 0;
 `;
 
-const PokedexContainer = styled.div` 
+const PokedexScreen = styled.div` 
   position: absolute;
-  margin: 0 -125px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10px 0 0 30px;
+  margin: 0px -125px;
   width: 1000px;
   height: 630px;
+  border-radius: 10px;
   background: rgb(59, 172, 172);
   animation: ${displayScreen} 5s;
   overflow-y: hidden;
+`
+
+const PokedexLeftContainer = styled.div` 
+  width: 50%;
+`
+
+const PokedexRightContainer = styled.div` 
+  width: 50%;
+`
+
+const PokedexImageContainer = styled.div`
+align-items: center;
+  width: 140px;
+  border-radius: 10px;
+  padding: 20px;
+  background: #fff;
 `
 
 function PokeballIntro() {
@@ -197,6 +248,7 @@ function PokeballIntro() {
   const [isClicked, setIsClicked] = useState(false)
   const [isExpand, setIsExpand] = useState(false)
   const [pokemonList, setPokemonList] = useState([])
+  const [pokemonSprite, setPokemonSprite] = useState('')
 
   const handleClick = () => {
     setIsClicked(true)
@@ -204,7 +256,7 @@ function PokeballIntro() {
 
   const fetchData = async () => {
     const res = await fetchKantoPokemon()
-    setPokemonList(res.results)
+    setPokemonList(res)
   }
 
   useEffect(() => {
@@ -224,13 +276,28 @@ function PokeballIntro() {
               <HalfRightCircle>
                 <HalfRightInsideCircle/>
               </HalfRightCircle>
-              <PokedexContainer>
-                {pokemonList.map((pokemon,i) => (
-                   <div key={pokemon.name}>
-                    <h6>{pokemon.name}</h6>
-                   </div>
-                ))}
-              </PokedexContainer> 
+                <PokedexScreen>
+                  <PokedexLeftContainer >
+                      {pokemonList.map((pokemon,i) => (
+                        <Pokemon key={pokemon.name} onClick={() => setPokemonSprite(pokemon.sprites.front_default)}>
+                          <TextContainer
+                            style={{
+                              marginLeft: Math.pow(i-7, 2),
+                              background: `rgb(214, 209, 130, ${i < 8 ? `0.${i+2}` : `${1 - 0.04 * i}`})`,
+                            }}>
+                            <Text style={{paddingLeft: Math.pow(i-7, 2) -50}}>
+                              {pokemon.name}
+                            </Text>
+                          </TextContainer>
+                        </Pokemon>
+                      ))}
+                  </PokedexLeftContainer>
+                  <PokedexRightContainer >
+                    <PokedexImageContainer>
+                      {pokemonSprite ? <img src={pokemonSprite}/> : null}
+                    </PokedexImageContainer>
+                  </PokedexRightContainer>
+                </PokedexScreen>
             </>
           : <Content isClicked={isClicked}>
               <Pokeball>
