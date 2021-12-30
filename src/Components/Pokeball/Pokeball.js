@@ -103,7 +103,7 @@ const Pokeball = styled.div`
 
   &:hover {
     transition: 1s ease-in;
-    background: linear-gradient(to top left, var(--pokeball-center-inactive), rgb(240, 83, 197));
+    background: linear-gradient(to top left, var(--pokeball-center-inactive), rgb(200, 83, 197));
   }
 `;
 
@@ -138,7 +138,7 @@ const PokeballButtonInside = styled.div`
   &:hover {
     transition: 0.5s;
     background-color: var(--pokeball-center-active);
-    background-image: linear-gradient(to top left, var(--pokeball-center-inactive), rgb(200, 83, 197));
+    background-image: linear-gradient(to top left, var(--pokeball-center-inactive), rgb(210, 83, 197));
   }
 `;
 
@@ -222,12 +222,13 @@ const PokedexScreen = styled.div`
   width: 1000px;
   height: 630px;
   border-radius: 10px;
-  background: rgb(59, 172, 172);
+  background: linear-gradient(#3bacac, #9198e5);
   animation: ${displayScreen} 5s;
   overflow-y: hidden;
 `
 
 const PokedexLeftContainer = styled.div` 
+  margin: 200px;
   width: 50%;
 `
 
@@ -236,11 +237,19 @@ const PokedexRightContainer = styled.div`
 `
 
 const PokedexImageContainer = styled.div`
-align-items: center;
+  align-items: center;
   width: 140px;
   border-radius: 10px;
   padding: 20px;
-  background: #fff;
+  background:
+    repeating-linear-gradient( 
+      125deg,
+      #fea 40%,
+      #feaaaa 50%,
+      #fea 60%,
+      #faa 70%
+    );
+  
 `
 
 function PokeballIntro() {
@@ -249,22 +258,40 @@ function PokeballIntro() {
   const [isExpand, setIsExpand] = useState(false)
   const [pokemonList, setPokemonList] = useState([])
   const [pokemonSprite, setPokemonSprite] = useState('')
+  const [keyDown, setKeyDown] = useState(0)
 
   const handleClick = () => {
     setIsClicked(true)
   }
 
   const fetchData = async () => {
-    const res = await fetchKantoPokemon()
+    const res = await fetchKantoPokemon(keyDown)
     setPokemonList(res)
   }
 
   useEffect(() => {
     if(isClicked){
       setTimeout(() => setIsExpand(true), 2000)
-      fetchData()
     }
-  }, [isClicked])
+    fetchData()
+  }, [isClicked, keyDown])
+
+
+  const checkKey = (e) => {
+      e = e || window.event
+
+      if (e.keyCode == '38') {
+        setKeyDown(keyDown === 0 ? keyDown : keyDown - 1)
+      }
+      else if (e.keyCode == '40') {
+        setKeyDown(keyDown + 1)
+      }
+      else if (e.keyCode == '13') {
+        setPokemonSprite(pokemonList[7].sprites.front_default)
+      }
+  }
+
+  document.onkeydown = checkKey;
   
   return (
       <>
@@ -277,25 +304,29 @@ function PokeballIntro() {
                 <HalfRightInsideCircle/>
               </HalfRightCircle>
                 <PokedexScreen>
-                  <PokedexLeftContainer >
-                      {pokemonList.map((pokemon,i) => (
-                        <Pokemon key={pokemon.name} onClick={() => setPokemonSprite(pokemon.sprites.front_default)}>
-                          <TextContainer
-                            style={{
-                              marginLeft: Math.pow(i-7, 2),
-                              background: `rgb(214, 209, 130, ${i < 8 ? `0.${i+2}` : `${1 - 0.04 * i}`})`,
-                            }}>
-                            <Text style={{paddingLeft: Math.pow(i-7, 2) -50}}>
-                              {pokemon.name}
-                            </Text>
-                          </TextContainer>
-                        </Pokemon>
-                      ))}
+                  <PokedexLeftContainer > 
+                    {pokemonSprite && 
+                      <PokedexImageContainer>
+                        <img src={pokemonSprite}/>
+                      </PokedexImageContainer>
+                    }
                   </PokedexLeftContainer>
                   <PokedexRightContainer >
-                    <PokedexImageContainer>
-                      {pokemonSprite ? <img src={pokemonSprite}/> : null}
-                    </PokedexImageContainer>
+                    {pokemonList.map((pokemon,i) => (
+                      <Pokemon key={pokemon.name} onClick={() => setPokemonSprite(pokemon.sprites.front_default)} >
+                        <TextContainer
+                          style={{
+                            marginLeft: -1 * Math.pow(i-7, 2),
+                            background: pokemonList.length === 16
+                              ? `rgb(234, 229, 150, ${i < 8 ? `0.${i+2}` : `${1 - 0.04 * i}`})`
+                              : `rgb(234, 229, 150, ${`${1 - 0.04 * i}`})`
+                          }}>
+                          <Text>
+                            {pokemon.name}
+                          </Text>
+                        </TextContainer>
+                      </Pokemon>
+                    ))}
                   </PokedexRightContainer>
                 </PokedexScreen>
             </>
