@@ -1,8 +1,22 @@
-import Pokeball from "./Components/Pokeball/Pokeball";
+import { useState } from "react";
+import Pokeball from "./components/Pokeball/Pokeball";
+import PokedexBorder from "./components/Pokedex/PokedexBorder";
+import PokedexScreen from "./components/Pokedex/PokedexScreen";
 
 function App() {
+  const [isClicked, setIsClicked] = useState(false);
+
+  const handleClick = (click) => {
+    setIsClicked(!click);
+  }
+
   return (
-    <Pokeball/>
+    isClicked 
+      ? <>    
+          <PokedexBorder />
+          <PokedexScreen />
+        </>
+      : <Pokeball onClick={handleClick}/>
   );
 }
 

@@ -1,42 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import styled, { keyframes } from 'styled-components'
-import fetchKantoPokemon from '../../fetch';
-
-const spandAndRotate = keyframes`
-  0% {
-      transform: rotate(0) scale(0.1);
-    }
-  100% {
-    transform: rotate(360deg) scale(1);
-  }
-`
-
-const alignToOpen = keyframes`
-  0% {
-    transform: rotate(0) scale(1.1);
-  }
-  100% {
-    transform: rotate(55deg) scale(1.8);
-  }
-`
-
-const openPokeballToLeft = keyframes`
-  0% {
-    transform: translateX(0);
-  }
-  100% {
-    transform: translateX(-500px);
-  }
-`
-
-const openPokeballToRight = keyframes`
-  0% {
-    transform: translateX(0);
-  }
-  100% {
-    transform: translateX(500px);
-  }
-`
+import fetchPokemons from '../../services/fetchPokemons';
+import useDebounce from '../../hooks/useDebounce';
 
 const displayScreen = keyframes`
   0% {
@@ -48,142 +13,6 @@ const displayScreen = keyframes`
     opacity: 1;
   }
 `
-
-const Content = styled.div`
-  animation-name: ${props => {
-    const isClicked = props.isClicked
-
-    if (isClicked === true) {
-      return alignToOpen;
-    } else {
-      return spandAndRotate;
-    }
-  }};
-  animation-duration: 1.2s;
-  padding: 10px;
-  transition: 0.5s;
-  transform: ${props => {
-    const isClicked = props.isClicked
-
-    if (isClicked === true)
-      return "rotate(55deg) scale(1.8)"
-    else
-      return "none"
-  }};
-
-  &:hover {
-    transform: ${props => {
-      const isClicked = props.isClicked
-
-      if (isClicked === true)
-        return "rotate(55deg) scale(1.8)"
-      else
-        return "scale(1.1)"
-    }};
-    transition: ${props => {
-      const isClicked = props.isClicked
-
-      if (isClicked === true)
-        return "none"
-      else
-        return "0.5s"
-    }};
-  }
-`;
-
-const Pokeball = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 350px;
-  width: 350px;
-  border-radius: 50%;
-  background: linear-gradient(to top left, var(--pokeball-center-inactive), rgb(159, 83, 197));
-  box-shadow: inset 0 0 1px 1px var(--background);
-  box-shadow: 0 0 1px 1px var(--background);
-  
-
-  &:hover {
-    transition: 1s ease-in;
-    background: linear-gradient(to top left, var(--pokeball-center-inactive), rgb(200, 83, 197));
-  }
-`;
-
-const PokeballLine = styled.div`
-  width: 100%;
-  height: 12%;
-  background-color: var(--background);
-  transform: rotate(36deg);
-`;
-
-const PokeballButtonOutside = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 150px;
-  height: 150px;
-  position: absolute;
-  border-radius: 50%;
-  background-color: var(--background);
-
-`;
-const PokeballButtonInside = styled.div`
-  width: 100px;
-  height: 100px;
-  position: absolute;
-  border-radius: 50%;
-  background-color: var(--pokeball-center-inactive);
-  background-image: linear-gradient(to top left, var(--pokeball-center-inactive), rgb(159, 83, 197));
-  transition: 1s;
-  cursor: pointer;
-
-  &:hover {
-    transition: 0.5s;
-    background-color: var(--pokeball-center-active);
-    background-image: linear-gradient(to top left, var(--pokeball-center-inactive), rgb(210, 83, 197));
-  }
-`;
-
-const HalfLeftCircle = styled.div`
-  animation: ${openPokeballToLeft} 2s;
-  transform:  translateX(-500px);
-  display: flex;
-  align-items: center;
-  justify-content: right;
-  float: left;
-  width: 315px;
-  height: 630px;
-  margin: 0 30px;
-  background: var(--pokeball-inactive);
-  background-image: linear-gradient(to top left, var(--pokeball-center-inactive), rgb(159, 83, 197));
-  border-radius: 630px 0 0 630px;
-  box-shadow: inset 0 0 0.5px 0.2px #3b0ca0;
-`;
-
-const HalfRightCircle = styled.div`
-  animation: ${openPokeballToRight} 2s;
-  transform:  translateX(500px);
-  display: flex;
-  align-items: center;
-  justify-content: left;
-  float: right;
-  width: 315px;
-  height: 630px;
-  margin: 0 30px;
-  background: var(--pokeball-inactive);
-  background-image: linear-gradient(to top right, var(--pokeball-center-inactive), rgb(159, 83, 197));
-  border-radius: 0 630px 630px 0;
-  box-shadow: inset 0 0 0.5px 0.2px #3b0ca0;
-`;
-
-const HalfLeftInsideCircle = styled.div`
-  float: left;
-  width: 100px;
-  height: 230px;
-  margin: 0 -1px;
-  background: var(--background);
-  border-radius: 230px 0 0 230px;
-`;
 
 const Pokemon = styled.div``
 
@@ -205,15 +34,6 @@ const TextContainer = styled.div`
 const Text = styled.label`
   cursor: pointer;
 `
-
-const HalfRightInsideCircle = styled.div`
-  float: right;
-  width: 100px;
-  height: 230px;
-  margin: 0 -1px;
-  background: var(--background);
-  border-radius: 0 230px 230px 0;
-`;
 
 const PokedexScreen = styled.div` 
   position: absolute;
@@ -276,7 +96,7 @@ const PokedexImageContainer = styled.div`
   
 `
 
-function PokeballIntro() {
+function Screen() {
 
   const [isClicked, setIsClicked] = useState(false)
   const [isExpand, setIsExpand] = useState(false)
@@ -285,13 +105,10 @@ function PokeballIntro() {
   const [firstTypeColor, setFirstTypeColor] = useState('')
   const [secondTypeColor, setSecondTypeColor] = useState('')
   const [keyDown, setKeyDown] = useState(0)
-
-  const handleClick = () => {
-    setIsClicked(true)
-  }
+  const debouncedChange = useDebounce(checkKey, 150)
 
   const fetchData = async () => {
-    const res = await fetchKantoPokemon(keyDown)
+    const res = await fetchPokemons(keyDown)
     if(res.length === 8) {
       setPokemonSprite(res[0].sprites.front_default)
       if(res[0].types.length > 1){
@@ -385,21 +202,20 @@ function PokeballIntro() {
       setTimeout(() => setIsExpand(true), 2000)
     }
     fetchData()
-  }, [isClicked, keyDown])
+  }, [keyDown])
 
+  function checkKey(e) {
+    e = e || window.event;
 
-  const checkKey = (e) => {
-      e = e || window.event
-
-      if (e.keyCode === '38') {
-        setKeyDown(keyDown === 0 ? keyDown : keyDown - 1)
-      }
-      else if (e.keyCode === '40') {
-        setKeyDown(keyDown + 1)
-      }
+    if (e.keyCode === 38) {
+      setKeyDown(keyDown === 0 ? keyDown : keyDown - 1)
+    }
+    else if (e.keyCode === 40) {
+      setKeyDown(keyDown + 1)
+    }
   }
 
-  document.onkeydown = checkKey;
+  document.onkeydown = (e) => debouncedChange(e)
 
   const alignContainer = () => {
     if(pokemonList.length === 8) return { alignItems: 'flex-end'}
@@ -455,53 +271,32 @@ function PokeballIntro() {
   }
   
   return (
-      <>
-        {isExpand 
-          ? <>
-              <HalfLeftCircle>
-                <HalfLeftInsideCircle/>
-              </HalfLeftCircle>
-              <HalfRightCircle>
-                <HalfRightInsideCircle/>
-              </HalfRightCircle>
-                <PokedexScreen style={{background: `linear-gradient(${firstTypeColor}, ${secondTypeColor})`}}>
-                  <PokedexLeftContainer > 
-                    {pokemonSprite && 
-                      <ImageContainerLayout>
-                        <PokedexImageContainer>
-                          <img src={pokemonSprite} alt='Pokemon'/>
-                        </PokedexImageContainer>
-                      </ImageContainerLayout>
-                    }
-                  </PokedexLeftContainer>
-                  <PokedexRightContainer style={alignContainer}>
-                    {pokemonList.map((pokemon,i) => (
-                      <Pokemon key={pokemon.name}>
-                        <TextContainer
-                          style={styleContainers(i)}>
-                          <Text>
-                            {pokemon.name}
-                          </Text>
-                        </TextContainer>
-                      </Pokemon>
-                    ))}
-                  </PokedexRightContainer>
-                </PokedexScreen>
-            </>
-          : <Content isClicked={isClicked}>
-              <Pokeball>
-              <PokeballLine />
-                <PokeballButtonOutside>
-                  <PokeballButtonInside
-                    onClick={() => handleClick()}/>
-                </PokeballButtonOutside>
-              </Pokeball>
-            </Content>
-        }
-      </>
-      
-    
+    <>
+      <PokedexScreen style={{background: `linear-gradient(${firstTypeColor}, ${secondTypeColor})`}}>
+        <PokedexLeftContainer > 
+          {pokemonSprite && 
+            <ImageContainerLayout>
+              <PokedexImageContainer>
+                <img src={pokemonSprite} alt='Pokemon'/>
+              </PokedexImageContainer>
+            </ImageContainerLayout>
+          }
+        </PokedexLeftContainer>
+        <PokedexRightContainer style={alignContainer}>
+          {pokemonList.map((pokemon,i) => (
+            <Pokemon key={pokemon.name}>
+              <TextContainer
+                style={styleContainers(i)}>
+                <Text>
+                  {pokemon.name}
+                </Text>
+              </TextContainer>
+            </Pokemon>
+          ))}
+        </PokedexRightContainer>
+      </PokedexScreen>
+    </>
   );
 }
 
-export default PokeballIntro;
+export default Screen;
