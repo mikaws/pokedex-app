@@ -27,7 +27,7 @@ const LeftBorder = styled.div`
   justify-content: right;
   float: left;
   width: 315px;
-  height: 630px;
+  height: 643px;
   margin: 0 30px;
   background: var(--pokeball-inactive);
   background-image: linear-gradient(to top left, var(--pokeball-center-inactive), rgb(159, 83, 197));
@@ -43,7 +43,7 @@ const RightBorder = styled.div`
   justify-content: left;
   float: right;
   width: 315px;
-  height: 630px;
+  height: 643px;
   margin: 0 30px;
   background: var(--pokeball-inactive);
   background-image: linear-gradient(to top right, var(--pokeball-center-inactive), rgb(159, 83, 197));
