@@ -1,6 +1,6 @@
 const fetchPokemons = async (position) => {
   let data =[]
-  let newPosition = 0;
+  let newPosition = 0
   if (position > 8) { 
     newPosition = position - 8
   }

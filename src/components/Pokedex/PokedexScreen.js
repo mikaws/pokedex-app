@@ -98,9 +98,7 @@ const PokedexImageContainer = styled.div`
 `
 
 function Screen() {
-  const [isClicked, setIsClicked] = useState(false)
-  const [isExpand, setIsExpand] = useState(false)
-  const [pokemonList, setPokemonList] = useState([])
+  const [pokemons, setPokemons] = useState([])
   const [pokemonSprite, setPokemonSprite] = useState('')
   const [firstTypeColor, setFirstTypeColor] = useState('')
   const [secondTypeColor, setSecondTypeColor] = useState('')
@@ -121,38 +119,43 @@ function Screen() {
 
   document.onkeydown = (e) => debouncedChange(e)
 
-  const fetchData = async () => {
-    const pokemons = await fetchPokemons(keyDown)
-    let length = pokemons.length
-    let pokemonPosition = 0
-
-    if(length >= 8 && length < 16) { pokemonPosition = length - 8 } 
-    else if(length >= 16) { pokemonPosition = 8 }
-
-    let pokemon = pokemons[pokemonPosition]
-    let isDualType = pokemon.types.length > 1 ? true : false
-    
-    setPokemonSprite(pokemon.sprites.front_default) 
-    setFirstTypeColor(getTypeColor(pokemon.types[0].type.name))
-    setSecondTypeColor(isDualType ? getTypeColor(pokemon.types[1].type.name) : secondTypeColor)
-
-    setPokemonList(pokemons)
-  }
-
   useEffect(() => {
-    if(isClicked){
-      setTimeout(() => setIsExpand(true), 2000)
+    const fetchData = async () => {
+      const res = await fetchPokemons(keyDown)
+      let length = res.length
+      let pokemonPosition = 0
+  
+      if(length >= 8 && length < 16) {
+        pokemonPosition = length - 8
+      } else if(length >= 16) {
+        pokemonPosition = 8
+      }
+  
+      let pokemon = res[pokemonPosition]
+
+      backgroundColorsHandler(pokemon.types[0].type.name, pokemon.types[1]?.type.name)
+      
+      setPokemonSprite(pokemon.sprites.front_default) 
+      setPokemons(res)
     }
     fetchData()
   }, [keyDown])
 
+  const backgroundColorsHandler = (firstType, secondType) => {
+    let firstColor = getTypeColor(firstType)
+    let secondColor = secondType && getTypeColor(secondType)
+    
+    setFirstTypeColor(actualColor => actualColor === firstColor ? actualColor : firstColor)
+    setSecondTypeColor(actualColor => secondColor ? secondColor : actualColor)
+  }
+
   const alignContainer = () => {
-    if(pokemonList.length === 8) return { alignItems: 'flex-end'}
-    else if(pokemonList.length > 8 && pokemonList.length <= 15) return { marginTop: 100 - (pokemonList.length - 8) * 10}
+    if(pokemons.length === 8) return { alignItems: 'flex-end'}
+    else if(pokemons.length > 8 && pokemons.length <= 15) return { marginTop: 100 - (pokemons.length - 8) * 10}
   }
 
   const styleContainers = (i) => {
-    let initial = pokemonList.length - 8
+    let initial = pokemons.length - 8
 
     if (i === initial) return {
       transform: 'scale(1.1)',
@@ -178,7 +181,7 @@ function Screen() {
           }
         </PokedexLeftContainer>
         <PokedexRightContainer style={alignContainer}>
-          {pokemonList.map((pokemon,i) => (
+          {pokemons.map((pokemon,i) => (
             <Pokemon key={pokemon.name}>
               <TextContainer
                 style={styleContainers(i)}>
