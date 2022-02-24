@@ -6,7 +6,7 @@ import PokedexScreen from "./components/Pokedex/PokedexScreen";
 function App() {
   const [isClicked, setIsClicked] = useState(false);
 
-  const handleClick = (click) => {
+  const handleClick = (click: boolean) => {
     setIsClicked(!click);
   }
 

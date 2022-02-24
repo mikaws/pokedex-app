@@ -1,4 +1,4 @@
-export const getTypeColor = (type) => {
+export const getTypeColor = (type: string): string => {
     switch( type ) {
       case 'normal': return '#A8A878'
       case 'fire': return '#F08030'

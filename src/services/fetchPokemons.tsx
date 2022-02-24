@@ -1,4 +1,4 @@
-const fetchPokemons = async (position) => {
+const fetchPokemons = async (position: number): Promise<any[]> => {
   let data =[]
   let newPosition = 0
   if (position > 8) { 

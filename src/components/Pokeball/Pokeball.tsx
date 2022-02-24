@@ -1,5 +1,13 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import styled, { keyframes } from 'styled-components'
+
+interface StyleProps {
+  isClicked: boolean
+}
+
+interface Props {
+  onClick: (click: boolean) => void
+}
 
 const spandAndRotate = keyframes`
   0% {
@@ -19,7 +27,7 @@ const alignToOpen = keyframes`
   }
 `
 
-const Content = styled.div`
+const Content = styled.div<StyleProps>`
   display: flex;
   align-items: center;
   justify-content: center;
@@ -106,7 +114,7 @@ const Button = styled.div`
   }
 `;
 
-function Pokeball(props) {
+function Pokeball(props: Props) {
   const [isClicked, setIsClicked] = useState(false)
   
   const handleClick = async () => {

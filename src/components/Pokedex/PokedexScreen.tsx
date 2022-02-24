@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import styled, { keyframes } from 'styled-components'
 import fetchPokemons from '../../services/fetchPokemons'
 import useDebounce from '../../hooks/useDebounce'
-import {getTypeColor} from '../../utils/util.js'
+import {getTypeColor} from '../../utils/util'
 
 const displayScreen = keyframes`
   0% {
@@ -98,26 +98,24 @@ const PokedexImageContainer = styled.div`
 `
 
 function Screen() {
-  const [pokemons, setPokemons] = useState([])
+  const [pokemons, setPokemons] = useState<any[]>([])
   const [pokemonSprite, setPokemonSprite] = useState('')
   const [firstTypeColor, setFirstTypeColor] = useState('')
   const [secondTypeColor, setSecondTypeColor] = useState('')
   const [keyDown, setKeyDown] = useState(0)
 
-  const checkKey = (e) =>{
-    e = e || window.event;
-
-    if (e.keyCode === 38) {
+  const checkKey = (e: KeyboardEvent) =>{
+    if (e.key === 'ArrowUp') {
       setKeyDown(keyDown === 0 ? keyDown : keyDown - 1)
     }
-    else if (e.keyCode === 40) {
+    else if (e.key === 'ArrowDown') {
       setKeyDown(keyDown + 1)
     }
   }
 
   const debouncedChange = useDebounce(checkKey, 150)
 
-  document.onkeydown = (e) => debouncedChange(e)
+  document.onkeydown = (e: KeyboardEvent) => debouncedChange(e)
 
   useEffect(() => {
     const fetchData = async () => {
@@ -141,7 +139,7 @@ function Screen() {
     fetchData()
   }, [keyDown])
 
-  const backgroundColorsHandler = (firstType, secondType) => {
+  const backgroundColorsHandler = (firstType: string, secondType?: string) => {
     let firstColor = getTypeColor(firstType)
     let secondColor = secondType && getTypeColor(secondType)
     
@@ -149,22 +147,18 @@ function Screen() {
     setSecondTypeColor(actualColor => secondColor ? secondColor : actualColor)
   }
 
-  const alignContainer = () => {
-    if(pokemons.length === 8) return { alignItems: 'flex-end'}
-    else if(pokemons.length > 8 && pokemons.length <= 15) return { marginTop: 100 - (pokemons.length - 8) * 10}
-  }
 
-  const styleContainers = (i) => {
+  const styleContainers = (index: number) => {
     let initial = pokemons.length - 8
 
-    if (i === initial) return {
+    if (index === initial) return {
       transform: 'scale(1.1)',
-      marginLeft: -1 * Math.pow(i-initial, 2),
+      marginLeft: -1 * Math.pow(index-initial, 2),
       background: `rgb(235, 230, 150)`
     }
     else return {
-      marginLeft: -1 * Math.pow(i-initial, 2),
-      background: `rgb(235, 230, 150, ${i < initial ? `0.${i+9-initial}` : 1 - (0.085 - (initial * 0.005)) * i})`
+      marginLeft: -1 * Math.pow(index-initial, 2),
+      background: `rgb(235, 230, 150, ${index < initial ? `0.${index+9-initial}` : 1 - (0.085 - (initial * 0.005)) * index})`
     }
   }
   
@@ -180,7 +174,7 @@ function Screen() {
             </ImageContainerLayout>
           }
         </PokedexLeftContainer>
-        <PokedexRightContainer style={alignContainer}>
+        <PokedexRightContainer>
           {pokemons.map((pokemon,i) => (
             <Pokemon key={pokemon.name}>
               <TextContainer
