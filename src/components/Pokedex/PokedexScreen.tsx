@@ -3,6 +3,7 @@ import styled, { keyframes } from 'styled-components'
 import fetchPokemons from '../../services/fetchPokemons'
 import useDebounce from '../../hooks/useDebounce'
 import {getTypeColor} from '../../utils/util'
+import Card from '../Card/Card'
 
 const displayScreen = keyframes`
   0% {
@@ -15,9 +16,7 @@ const displayScreen = keyframes`
   }
 `
 
-const Pokemon = styled.div``
-
-const TextContainer = styled.div`
+const TextCard = styled.div`
   padding: 7.5px;
   margin: 5px;
   width: 150px;
@@ -29,14 +28,9 @@ const TextContainer = styled.div`
   &:hover {
     transform: scale(1.05);
   }
-
 `
 
-const Text = styled.label`
-  cursor: pointer;
-`
-
-const PokedexScreen = styled.div` 
+const Background = styled.div` 
   position: absolute;
   display: flex;
   justify-content: center;
@@ -52,52 +46,19 @@ const PokedexScreen = styled.div`
   overflow-y: hidden;
 `
 
-const PokedexLeftContainer = styled.div` 
+const LeftContainer = styled.div` 
   margin: 200px;
   width: 50%;
 `
 
-const PokedexRightContainer = styled.div`
+const RightContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-self: flex-end;
   width: 40%;
 `
 
-const ImageContainerLayout = styled.div`
-  width: 150px;
-  padding: 5px;
-  border-radius: 10px;
-  background:
-    repeating-linear-gradient( 
-      125deg,
-      #1198e0 0%,
-      #a198e5 50%,
-      #1198e0 80%,
-      #a198e5 100%
-    );
-  border: 1px solid #3b0ca0;
-  box-shadow: inset 0 0 0.5px 0.2px #3b0ca0;
-`
-
-const PokedexImageContainer = styled.div`
-  align-items: center;
-  width: 140px;
-  border-radius: 10px;
-  padding: 20px;
-  background:
-    repeating-linear-gradient( 
-      125deg,
-      #fea 40%,
-      #feaaaa 50%,
-      #fea 60%,
-      #faa 70%
-    );
-  border: 1px solid #3c2ca4;
-  
-`
-
-function Screen() {
+function PokedexScreen() {
   const [pokemons, setPokemons] = useState<any[]>([])
   const [pokemonSprite, setPokemonSprite] = useState('')
   const [firstTypeColor, setFirstTypeColor] = useState('')
@@ -147,7 +108,6 @@ function Screen() {
     setSecondTypeColor(actualColor => secondColor ? secondColor : actualColor)
   }
 
-
   const styleContainers = (index: number) => {
     let initial = pokemons.length - 8
 
@@ -163,32 +123,23 @@ function Screen() {
   }
   
   return (
-    <>
-      <PokedexScreen style={{background: `linear-gradient(${firstTypeColor}, ${secondTypeColor})`}}>
-        <PokedexLeftContainer > 
-          {pokemonSprite && 
-            <ImageContainerLayout>
-              <PokedexImageContainer>
-                <img src={pokemonSprite} alt='Pokemon'/>
-              </PokedexImageContainer>
-            </ImageContainerLayout>
-          }
-        </PokedexLeftContainer>
-        <PokedexRightContainer>
-          {pokemons.map((pokemon,i) => (
-            <Pokemon key={pokemon.name}>
-              <TextContainer
-                style={styleContainers(i)}>
-                <Text>
-                  {pokemon.name}
-                </Text>
-              </TextContainer>
-            </Pokemon>
-          ))}
-        </PokedexRightContainer>
-      </PokedexScreen>
-    </>
+    <Background style={{background: `linear-gradient(${firstTypeColor}, ${secondTypeColor})`}}>
+      <LeftContainer> 
+        <Card>
+          <img src={pokemonSprite} alt='Pokemon'/>
+        </Card>
+      </LeftContainer>
+      <RightContainer>
+        {pokemons.map((pokemon,i) => (
+          <TextCard
+            style={styleContainers(i)}
+            key={pokemon.name}>
+              {pokemon.name}
+          </TextCard>
+        ))}
+      </RightContainer>
+    </Background>
   );
 }
 
-export default Screen;
+export default PokedexScreen;
