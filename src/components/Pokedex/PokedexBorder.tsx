@@ -68,7 +68,7 @@ const RightBorderOutline = styled.div`
   border-radius: 0 230px 230px 0;
 `;
 
-function PokedexBorder() {
+const PokedexBorder: React.FC = () => {
   return (
     <>
       <LeftBorder>

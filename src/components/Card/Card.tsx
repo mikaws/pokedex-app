@@ -1,7 +1,7 @@
 import styled from 'styled-components'
 
 interface Props {
-  children?: React.ReactNode
+  children?: JSX.Element
 }
 
 const CardBorder = styled.div`
@@ -35,7 +35,7 @@ const CardBackground = styled.div`
   );
   border: 1px solid #3c2ca4;
 `
-function Card({children}: Props) {
+const Card: React.FC<Props> = ({children}) => {
   return (
     <CardBorder>
       <CardBackground>

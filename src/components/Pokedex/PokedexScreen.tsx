@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react'
 import styled, { keyframes } from 'styled-components'
-import fetchPokemons from '../../services/fetchPokemons'
-import useDebounce from '../../hooks/useDebounce'
-import {getTypeColor} from '../../utils/util'
+import { fetchPokemons } from '../../services/fetchPokemons'
+import { useDebounce } from '../../hooks/useDebounce'
+import { getTypeColor } from '../../utils/util'
 import Card from '../Card/Card'
 
 const displayScreen = keyframes`
@@ -58,7 +58,7 @@ const RightContainer = styled.div`
   width: 40%;
 `
 
-function PokedexScreen() {
+const PokedexScreen: React.FC = () => {
   const [pokemons, setPokemons] = useState<any[]>([])
   const [pokemonSprite, setPokemonSprite] = useState('')
   const [firstTypeColor, setFirstTypeColor] = useState('')

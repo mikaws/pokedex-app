@@ -114,10 +114,10 @@ const Button = styled.div`
   }
 `;
 
-function Pokeball(props: Props) {
+const Pokeball: React.FC<Props> = (props: Props) => {
   const [isClicked, setIsClicked] = useState(false)
   
-  const handleClick = async () => {
+  const handleClick = async (): Promise<void> => {
     setIsClicked(!isClicked)
     setTimeout(() => {
       return props.onClick(isClicked)

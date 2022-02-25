@@ -3,7 +3,7 @@ import Pokeball from "./components/Pokeball/Pokeball";
 import PokedexBorder from "./components/Pokedex/PokedexBorder";
 import PokedexScreen from "./components/Pokedex/PokedexScreen";
 
-function App() {
+const App: React.FC = () => {
   const [isClicked, setIsClicked] = useState(false);
 
   const handleClick = (click: boolean) => {

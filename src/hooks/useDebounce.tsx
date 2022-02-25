@@ -1,13 +1,12 @@
 import { useRef } from "react"
 
-interface T {
-  (...args: any[]): void
-}
+type CallBackType = (...args: any[]) => void
+type ResultType = CallBackType
 
-export default function useDebounce(fn: T, delay: number): T {
+export const useDebounce = (fn: CallBackType, delay: number): ResultType => {
   const timeoutRef: any = useRef(null)
 
-  function debounceFn(...args: any[]) {
+  const debounceFn = (...args: any[]) => {
     window.clearTimeout(timeoutRef.current)
     timeoutRef.current = window.setTimeout(() => {
       fn(...args)
@@ -15,5 +14,4 @@ export default function useDebounce(fn: T, delay: number): T {
   }
   
   return debounceFn
-  
 }

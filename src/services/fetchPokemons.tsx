@@ -1,4 +1,4 @@
-const fetchPokemons = async (position: number): Promise<any[]> => {
+export const fetchPokemons = async (position: number): Promise<any[]> => {
   let data =[]
   let newPosition = 0
   if (position > 8) { 
@@ -12,5 +12,3 @@ const fetchPokemons = async (position: number): Promise<any[]> => {
 
   return data
 }
-
-export default fetchPokemons
