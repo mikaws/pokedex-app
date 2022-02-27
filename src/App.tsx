@@ -1,3 +1,4 @@
+import React from "react";
 import { useState } from "react";
 import Pokeball from "./components/Pokeball/Pokeball";
 import PokedexBorder from "./components/Pokedex/PokedexBorder";

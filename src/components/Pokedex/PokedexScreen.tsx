@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import styled, { keyframes } from 'styled-components'
 import { fetchPokemons } from '../../services/fetchPokemons'
 import { useDebounce } from '../../hooks/useDebounce'
