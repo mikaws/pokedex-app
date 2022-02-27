@@ -1,9 +1,9 @@
 {
   "name": "pokedex-app",
   "version": "1.0.0",
+  "license": "MIT",
   "scripts": {
-    "dev:base": "webpack-dev-server --mode development --config webpack.config.js",
-    "dev": "npm run dev:base -- --open",
+    "dev": "webpack-dev-server --mode development --config webpack.config.js --open",
     "prepare": "husky install"
   },
   "devDependencies": {
