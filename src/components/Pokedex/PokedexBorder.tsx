@@ -33,7 +33,7 @@ const LeftBorder = styled.div`
   background-image: linear-gradient(to top left, var(--pokeball-center-inactive), rgb(159, 83, 197));
   border-radius: 630px 0 0 630px;
   box-shadow: inset 0 0 0.5px 0.2px #3b0ca0;
-`;
+`
 
 const RightBorder = styled.div`
   animation: ${openPokeballToRight} 2s;
@@ -49,7 +49,7 @@ const RightBorder = styled.div`
   background-image: linear-gradient(to top right, var(--pokeball-center-inactive), rgb(159, 83, 197));
   border-radius: 0 630px 630px 0;
   box-shadow: inset 0 0 0.5px 0.2px #3b0ca0;
-`;
+`
 
 const LeftBorderOutline = styled.div`
   float: left;
@@ -58,7 +58,7 @@ const LeftBorderOutline = styled.div`
   margin: 0 -1px;
   background: var(--background);
   border-radius: 230px 0 0 230px;
-`;
+`
 
 const RightBorderOutline = styled.div`
   float: right;
@@ -67,7 +67,7 @@ const RightBorderOutline = styled.div`
   margin: 0 -1px;
   background: var(--background);
   border-radius: 0 230px 230px 0;
-`;
+`
 
 const PokedexBorder: React.FC = () => {
   return (
@@ -79,7 +79,7 @@ const PokedexBorder: React.FC = () => {
         <RightBorderOutline/>
       </RightBorder>
     </>
-  );
+  )
 }
 
-export default PokedexBorder;
+export default PokedexBorder

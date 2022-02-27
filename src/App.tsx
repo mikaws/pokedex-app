@@ -1,24 +1,23 @@
-import React from "react";
-import { useState } from "react";
-import Pokeball from "./components/Pokeball/Pokeball";
-import PokedexBorder from "./components/Pokedex/PokedexBorder";
-import PokedexScreen from "./components/Pokedex/PokedexScreen";
+import React, { useState } from 'react'
+import Pokeball from './components/Pokeball/Pokeball'
+import PokedexBorder from './components/Pokedex/PokedexBorder'
+import PokedexScreen from './components/Pokedex/PokedexScreen'
 
 const App: React.FC = () => {
-  const [isClicked, setIsClicked] = useState(false);
+  const [isClicked, setIsClicked] = useState(false)
 
-  const handleClick = (click: boolean) => {
-    setIsClicked(!click);
+  const handleClick = (click: boolean): void => {
+    setIsClicked(!click)
   }
 
   return (
-    isClicked 
-      ? <>    
+    isClicked
+      ? <>
           <PokedexBorder />
           <PokedexScreen />
         </>
       : <Pokeball onClick={handleClick}/>
-  );
+  )
 }
 
-export default App;
+export default App

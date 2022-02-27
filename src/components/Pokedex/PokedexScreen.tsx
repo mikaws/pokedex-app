@@ -65,11 +65,10 @@ const PokedexScreen: React.FC = () => {
   const [secondTypeColor, setSecondTypeColor] = useState('')
   const [keyDown, setKeyDown] = useState(0)
 
-  const checkKey = (e: KeyboardEvent) =>{
+  const checkKey = (e: KeyboardEvent): void => {
     if (e.key === 'ArrowUp') {
       setKeyDown(keyDown === 0 ? keyDown : keyDown - 1)
-    }
-    else if (e.key === 'ArrowDown') {
+    } else if (e.key === 'ArrowDown') {
       setKeyDown(keyDown + 1)
     }
   }
@@ -79,58 +78,63 @@ const PokedexScreen: React.FC = () => {
   document.onkeydown = (e: KeyboardEvent) => debouncedChange(e)
 
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchData = async (): Promise<void> => {
       const res = await fetchPokemons(keyDown)
-      let length = res.length
+      const length = res.length
       let pokemonPosition = 0
-  
-      if(length >= 8 && length < 16) {
+
+      if (length >= 8 && length < 16) {
         pokemonPosition = length - 8
-      } else if(length >= 16) {
+      } else if (length >= 16) {
         pokemonPosition = 8
       }
-  
-      let pokemon = res[pokemonPosition]
+
+      const pokemon = res[pokemonPosition]
 
       backgroundColorsHandler(pokemon.types[0].type.name, pokemon.types[1]?.type.name)
-      
-      setPokemonSprite(pokemon.sprites.front_default) 
+
+      setPokemonSprite(pokemon.sprites.front_default)
       setPokemons(res)
     }
     fetchData()
   }, [keyDown])
 
-  const backgroundColorsHandler = (firstType: string, secondType?: string) => {
-    let firstColor = getTypeColor(firstType)
-    let secondColor = secondType && getTypeColor(secondType)
-    
+  const backgroundColorsHandler = (firstType: string, secondType?: string): void => {
+    const firstColor = getTypeColor(firstType)
+    const secondColor = secondType && getTypeColor(secondType)
+
     setFirstTypeColor(actualColor => actualColor === firstColor ? actualColor : firstColor)
-    setSecondTypeColor(actualColor => secondColor ? secondColor : actualColor)
+    setSecondTypeColor(actualColor => secondColor ?? actualColor)
   }
 
-  const styleContainers = (index: number) => {
-    let initial = pokemons.length - 8
+  const styleContainers = (index: number): Object => {
+    const initial = pokemons.length - 8
+    let styles = {}
 
-    if (index === initial) return {
-      transform: 'scale(1.1)',
-      marginLeft: -1 * Math.pow(index-initial, 2),
-      background: `rgb(235, 230, 150)`
+    if (index === initial) {
+      styles = {
+        transform: 'scale(1.1)',
+        marginLeft: -1 * Math.pow(index - initial, 2),
+        background: 'rgb(235, 230, 150)'
+      }
+    } else {
+      styles = {
+        marginLeft: -1 * Math.pow(index - initial, 2),
+        background: `rgb(235, 230, 150, ${index < initial ? `0.${index + 9 - initial}` : 1 - (0.085 - (initial * 0.005)) * index})`
+      }
     }
-    else return {
-      marginLeft: -1 * Math.pow(index-initial, 2),
-      background: `rgb(235, 230, 150, ${index < initial ? `0.${index+9-initial}` : 1 - (0.085 - (initial * 0.005)) * index})`
-    }
+    return styles
   }
-  
+
   return (
-    <Background style={{background: `linear-gradient(${firstTypeColor}, ${secondTypeColor})`}}>
-      <LeftContainer> 
+    <Background style={{ background: `linear-gradient(${firstTypeColor}, ${secondTypeColor})` }}>
+      <LeftContainer>
         <Card>
           <img src={pokemonSprite} alt='Pokemon'/>
         </Card>
       </LeftContainer>
       <RightContainer>
-        {pokemons.map((pokemon,i) => (
+        {pokemons.map((pokemon, i) => (
           <TextCard
             style={styleContainers(i)}
             key={pokemon.name}>
@@ -139,7 +143,7 @@ const PokedexScreen: React.FC = () => {
         ))}
       </RightContainer>
     </Background>
-  );
+  )
 }
 
-export default PokedexScreen;
+export default PokedexScreen
