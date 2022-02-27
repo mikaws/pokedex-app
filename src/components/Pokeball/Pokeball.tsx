@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState } from 'react'
 import styled, { keyframes } from 'styled-components'
 
 interface StyleProps {
@@ -42,18 +42,15 @@ const Content = styled.div<StyleProps>`
   transform: ${props => {
     const isClicked = props.isClicked
 
-    if (isClicked === true)
-      return "rotate(55deg) scale(1.8)"
-    else
-      return "none"
+    if (isClicked) { return 'rotate(55deg) scale(1.8)' } else { return 'none' }
   }};
   animation-name: ${props => {
     const isClicked = props.isClicked
 
-    if (isClicked === true) {
-      return alignToOpen;
+    if (isClicked) {
+      return alignToOpen
     } else {
-      return spandAndRotate;
+      return spandAndRotate
     }
   }};
 
@@ -62,21 +59,15 @@ const Content = styled.div<StyleProps>`
     transform: ${props => {
       const isClicked = props.isClicked
 
-      if (isClicked === true)
-        return "rotate(55deg) scale(1.8)"
-      else
-        return "scale(1.1)"
+      if (isClicked) { return 'rotate(55deg) scale(1.8)' } else { return 'scale(1.1)' }
     }};
     transition: ${props => {
       const isClicked = props.isClicked
 
-      if (isClicked === true)
-        return "1s ease-in"
-      else
-        return "0.5s"
+      if (isClicked) { return '1s ease-in' } else { return '0.5s' }
     }};
   }
-`;
+`
 
 const Line = styled.div`
   position: absolute;
@@ -84,7 +75,7 @@ const Line = styled.div`
   height: 40px;
   background-color: var(--background);
   transform: rotate(36deg);
-`;
+`
 
 const ButtonOutline = styled.div`
   display: flex;
@@ -96,7 +87,7 @@ const ButtonOutline = styled.div`
   border-radius: 50%;
   background-color: var(--background);
 
-`;
+`
 const Button = styled.div`
   width: 100px;
   height: 100px;
@@ -112,16 +103,16 @@ const Button = styled.div`
     background-color: var(--pokeball-center-active);
     background-image: linear-gradient(to top left, var(--pokeball-center-inactive), rgb(210, 83, 197));
   }
-`;
+`
 
 const Pokeball: React.FC<Props> = (props: Props) => {
   const [isClicked, setIsClicked] = useState(false)
-  
+
   const handleClick = async (): Promise<void> => {
     setIsClicked(!isClicked)
     setTimeout(() => {
       return props.onClick(isClicked)
-    } , 1500)
+    }, 1500)
   }
 
   return (
@@ -129,10 +120,10 @@ const Pokeball: React.FC<Props> = (props: Props) => {
         <Line />
         <ButtonOutline>
           <Button
-            onClick={() => handleClick()}/>
+            onClick={async () => await handleClick()}/>
         </ButtonOutline>
       </Content>
-  );
+  )
 }
 
-export default Pokeball;
+export default Pokeball

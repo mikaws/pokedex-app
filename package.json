@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "scripts": {
     "dev:base": "webpack-dev-server --mode development --config webpack.config.js",
-    "dev": "npm run dev:base -- --open"
+    "dev": "npm run dev:base -- --open",
+    "prepare": "husky install"
   },
   "devDependencies": {
     "@babel/core": "^7.17.5",
@@ -26,6 +27,8 @@
     "eslint-plugin-react": "^7.29.2",
     "git-commit-msg-linter": "^4.1.0",
     "html-webpack-plugin": "^5.5.0",
+    "husky": "^7.0.4",
+    "lint-staged": "^12.3.4",
     "style-loader": "^3.3.1",
     "ts-loader": "^9.2.6",
     "typescript": "*",

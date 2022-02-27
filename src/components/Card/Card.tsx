@@ -36,14 +36,14 @@ const CardBackground = styled.div`
   );
   border: 1px solid #3c2ca4;
 `
-const Card: React.FC<Props> = ({children}) => {
+const Card: React.FC<Props> = ({ children }) => {
   return (
     <CardBorder>
       <CardBackground>
         {children}
       </CardBackground>
     </CardBorder>
-  );
+  )
 }
 
-export default Card;
+export default Card
