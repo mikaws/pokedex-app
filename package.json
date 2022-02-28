@@ -2,6 +2,7 @@
   "name": "pokedex-app",
   "version": "1.0.0",
   "license": "MIT",
+  "description": "A Pokedex application",
   "scripts": {
     "dev": "webpack-dev-server --mode development --config webpack.config.js --open",
     "prepare": "husky install"
