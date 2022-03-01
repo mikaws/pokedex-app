@@ -1,6 +1,5 @@
 import React from 'react'
 import styled from 'styled-components'
-import Loading from '../Loading/Loading'
 
 interface Props {
   children?: JSX.Element
@@ -37,13 +36,12 @@ const CardBackground = styled.div`
       #faa 70%
   );
   border: 1px solid #3c2ca4;
-
 `
 const Card: React.FC<Props> = ({ children }) => {
   return (
     <CardBorder>
       <CardBackground>
-          {children?.props?.src ? children : <Loading />}
+          {children}
       </CardBackground>
     </CardBorder>
   )

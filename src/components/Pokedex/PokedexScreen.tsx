@@ -4,6 +4,9 @@ import { fetchPokemons } from '../../services/fetchPokemons'
 import { useDebounce } from '../../hooks/useDebounce'
 import { getTypeColor } from '../../utils/util'
 import Card from '../Card/Card'
+import Loading from '../Loading/Loading'
+
+let loadtime = 0
 
 const displayScreen = keyframes`
   0% {
@@ -58,12 +61,19 @@ const RightContainer = styled.div`
   width: 40%;
 `
 
+const Pokemon = styled.img`
+  display: inline-block;
+`
+
 const PokedexScreen: React.FC = () => {
   const [pokemons, setPokemons] = useState<any[]>([])
   const [pokemonSprite, setPokemonSprite] = useState('')
   const [firstTypeColor, setFirstTypeColor] = useState('')
   const [secondTypeColor, setSecondTypeColor] = useState('')
   const [keyDown, setKeyDown] = useState(0)
+  const [loaded, setLoaded] = useState(false)
+
+  const startTime = new Date().getTime()
 
   const checkKey = (e: KeyboardEvent): void => {
     if (e.key === 'ArrowUp') {
@@ -76,6 +86,15 @@ const PokedexScreen: React.FC = () => {
   const debouncedChange = useDebounce(checkKey, 150)
 
   document.onkeydown = (e: KeyboardEvent) => debouncedChange(e)
+
+  const doneLoading = (): void => {
+    loadtime = new Date().getTime() - startTime
+    setLoaded(true)
+  }
+
+  useEffect(() => {
+    setLoaded(loaded => loadtime > 150 ? false : loaded)
+  }, [pokemonSprite])
 
   useEffect(() => {
     const fetchData = async (): Promise<void> => {
@@ -130,7 +149,14 @@ const PokedexScreen: React.FC = () => {
     <Background style={{ background: `linear-gradient(${firstTypeColor}, ${secondTypeColor})` }}>
       <LeftContainer>
         <Card>
-          <img src={pokemonSprite} alt='Pokemon'/>
+          <>
+            {!loaded && <Loading/>}
+            <Pokemon
+              style={!loaded ? { display: 'none' } : {}}
+              src={pokemonSprite}
+              alt='Pokemon'
+              onLoad={doneLoading}/>
+          </>
         </Card>
       </LeftContainer>
       <RightContainer>
