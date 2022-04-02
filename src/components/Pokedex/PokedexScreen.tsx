@@ -93,7 +93,7 @@ const PokedexScreen: React.FC = () => {
   }
 
   useEffect(() => {
-    setLoaded(loaded => loadtime > 150 ? false : loaded)
+    setLoaded(loaded => loadtime > 1000 ? false : loaded)
   }, [pokemonSprite])
 
   useEffect(() => {
