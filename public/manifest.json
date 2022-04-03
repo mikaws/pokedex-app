@@ -2,8 +2,14 @@
   "short_name": "Pokedex",
   "name": "WebPokedex",
   "description": "Made with love by @mikaws",
+  "icons": [
+    {
+      "src": "favicon.ico",
+      "type": "image/x-icon"
+    }
+  ],
   "start_url": ".",
   "display": "standalone",
-  "theme_color": "#000000",
+  "theme_color": "#222222",
   "background_color": "#222222"
 }
