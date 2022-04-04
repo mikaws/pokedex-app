@@ -2,10 +2,13 @@ const path = require('path')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 
 module.exports = {
-  entry: './index.tsx',
+  entry: {
+    main: './index.tsx'
+  },
   output: {
     path: path.join(__dirname, '/dist'),
-    filename: 'bundle.js'
+    filename: 'bundle.[chunkhash].js',
+    filename: '[name].[chunkhash].js'
   },
   resolve: {
     extensions: ['.ts', '.tsx', '.js']
