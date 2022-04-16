@@ -5,6 +5,7 @@
   "description": "A Pokedex application",
   "scripts": {
     "dev": "webpack-dev-server --mode development --config webpack.config.js --open",
+    "test": "jest --config jest.config.js",
     "prepare": "husky install"
   },
   "devDependencies": {
@@ -15,7 +16,7 @@
     "@babel/preset-typescript": "^7.16.7",
     "@testing-library/dom": "^8.12.0",
     "@testing-library/jest-dom": "^5.16.3",
-    "@testing-library/react": "^13.0.0",
+    "@testing-library/react": "^12.1.2",
     "@types/react": "^17.0.39",
     "@types/react-dom": "^17.0.11",
     "@types/styled-components": "^5.1.23",
@@ -37,6 +38,7 @@
     "jest-dom": "^4.0.0",
     "lint-staged": "^12.3.4",
     "style-loader": "^3.3.1",
+    "ts-jest": "^27.1.4",
     "ts-loader": "^9.2.6",
     "typescript": "*",
     "webpack": "^5.69.1",

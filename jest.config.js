@@ -1,5 +1,5 @@
 module.exports = {
-  testIgnorePatterns: ['/node_modules/', '/dist/'],
+  testPathIgnorePatterns: ['/node_modules/', '/dist/'],
   setupFilesAfterEnv: [
     '<rootDir>/src/tests/setupTests.ts'
   ],
