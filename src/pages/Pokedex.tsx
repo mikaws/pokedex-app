@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import styled, { keyframes } from 'styled-components'
 import { fetchPokemons } from '../services/fetchPokemons'
 import { useDebounce } from '../hooks/useDebounce'
-import { getTypeColor } from '../utils/util'
+import { formatColor } from '../utils/'
 import Card from '../components/Card/Card'
 import Loading from '../components/Loading/Loading'
 import Border from '../components/Border/Border'
@@ -122,8 +122,8 @@ const PokedexScreen: React.FC = () => {
   }, [keyDown])
 
   const backgroundColorsHandler = (firstType: string, secondType?: string): void => {
-    const firstColor = getTypeColor(firstType)
-    const secondColor = secondType && getTypeColor(secondType)
+    const firstColor = formatColor(firstType)
+    const secondColor = secondType && formatColor(secondType)
 
     setFirstTypeColor(actualColor => actualColor === firstColor ? actualColor : firstColor)
     setSecondTypeColor(actualColor => secondColor ?? actualColor)
