@@ -40,7 +40,7 @@ const CardBackground = styled.div`
 const Card: React.FC<Props> = ({ children }) => {
   return (
     <CardBorder>
-      <CardBackground>
+      <CardBackground data-testid='content-wrapper'>
           {children}
       </CardBackground>
     </CardBorder>
