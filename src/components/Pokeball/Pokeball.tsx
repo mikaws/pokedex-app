@@ -116,10 +116,11 @@ const Pokeball: React.FC<Props> = (props: Props) => {
   }
 
   return (
-      <Content isClicked={isClicked}>
+      <Content data-testid='pokeball-wrap' isClicked={isClicked}>
         <Line />
         <ButtonOutline>
           <Button
+            data-testid='pokeball-button'
             onClick={async () => await handleClick()}/>
         </ButtonOutline>
       </Content>
