@@ -33,7 +33,7 @@ const CircularLoading = styled.div`
 
 const Loading: React.FC = () => {
   return (
-    <LoadingContainer>
+    <LoadingContainer data-testid='loading-wrap'>
       <CircularLoading/>
     </LoadingContainer>
   )
