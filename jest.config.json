@@ -1,0 +1,20 @@
+{
+  "testPathIgnorePatterns": [
+    "/node_modules/",
+    "/dist/"
+
+  ],
+  "setupFilesAfterEnv": [
+    "<rootDir>/src/tests/setupTests.ts"
+  ],
+  "transform": {
+    "^.+\\.(js|jsx|ts|tsx)$": "<rootDir>/node_modules/babel-jest"
+  },
+  "testEnvironment": "jsdom",
+  "collectCoverage": true,
+  "collectCoverageFrom": ["src/**/*.{ts,tsx}"],
+  "coveragePathIgnorePatterns": [
+    "src/tests/setupTests.ts",
+    "src/styles/"
+  ]
+}
