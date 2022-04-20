@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react'
 import styled, { keyframes } from 'styled-components'
-import { fetchPokemons } from '../../services/fetchPokemons'
-import { useDebounce } from '../../hooks/useDebounce'
-import { getTypeColor } from '../../utils/util'
-import Card from '../Card/Card'
-import Loading from '../Loading/Loading'
+import { fetchPokemons } from '../services/fetchPokemons'
+import { useDebounce } from '../hooks/useDebounce'
+import { getTypeColor } from '../utils/util'
+import Card from '../components/Card/Card'
+import Loading from '../components/Loading/Loading'
+import Border from '../components/Border/Border'
+import Pokeball from '../components/Pokeball/Pokeball'
 
 let loadtime = 0
 
@@ -33,7 +35,7 @@ const TextCard = styled.div`
   }
 `
 
-const Background = styled.div` 
+const Screen = styled.div` 
   position: absolute;
   display: flex;
   justify-content: center;
@@ -61,7 +63,7 @@ const RightContainer = styled.div`
   width: 40%;
 `
 
-const Pokemon = styled.img`
+const PokemonImage = styled.img`
   display: inline-block;
 `
 
@@ -72,6 +74,7 @@ const PokedexScreen: React.FC = () => {
   const [secondTypeColor, setSecondTypeColor] = useState('')
   const [keyDown, setKeyDown] = useState(0)
   const [loaded, setLoaded] = useState(false)
+  const [isClicked, setIsClicked] = useState(false)
 
   const startTime = new Date().getTime()
 
@@ -145,30 +148,39 @@ const PokedexScreen: React.FC = () => {
     return styles
   }
 
+  const handleClick = (click: boolean): void => {
+    setIsClicked(!click)
+  }
+
   return (
-    <Background style={{ background: `linear-gradient(${firstTypeColor}, ${secondTypeColor})` }}>
-      <LeftContainer>
-        <Card>
-          <>
-            {!loaded && <Loading/>}
-            <Pokemon
-              style={!loaded ? { display: 'none' } : {}}
-              src={pokemonSprite}
-              alt='Pokemon'
-              onLoad={doneLoading}/>
-          </>
-        </Card>
-      </LeftContainer>
-      <RightContainer>
-        {pokemons.map((pokemon, i) => (
-          <TextCard
-            style={styleContainers(i)}
-            key={pokemon.name}>
-              {pokemon.name}
-          </TextCard>
-        ))}
-      </RightContainer>
-    </Background>
+    isClicked
+      ? <>
+          <Border />
+          <Screen style={{ background: `linear-gradient(${firstTypeColor}, ${secondTypeColor})` }}>
+            <LeftContainer>
+              <Card>
+                <>
+                  {!loaded && <Loading/>}
+                  <PokemonImage
+                    style={!loaded ? { display: 'none' } : {}}
+                    src={pokemonSprite}
+                    alt='Pokemon'
+                    onLoad={doneLoading}/>
+                </>
+              </Card>
+            </LeftContainer>
+            <RightContainer>
+              {pokemons.map((pokemon, i) => (
+                <TextCard
+                  style={styleContainers(i)}
+                  key={pokemon.name}>
+                    {pokemon.name}
+                </TextCard>
+              ))}
+            </RightContainer>
+          </Screen>
+        </>
+      : <Pokeball onClick={handleClick}/>
   )
 }
 
