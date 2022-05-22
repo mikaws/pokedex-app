@@ -4,7 +4,7 @@ Still in development...
 
 ### Todo list
 
-1. Add tests
+1. Add tests ✅
 2. Add a container with pokemon info
 3. Add filter buttons and search bar
 4. Add responsive styles
