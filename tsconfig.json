@@ -20,6 +20,7 @@
       "moduleResolution": "node",
       "resolveJsonModule": true,
       "isolatedModules": true,
+      "useUnknownInCatchVariables": false,
       "noEmit": false,
       "jsx": "react-jsx"
   },

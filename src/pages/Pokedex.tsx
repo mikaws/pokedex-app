@@ -1,14 +1,22 @@
 import React, { useState, useEffect } from 'react'
 import styled, { keyframes } from 'styled-components'
-import { fetchPokemons } from '../services/fetchPokemons'
+import { fetchPokemons, fetchTargetPokemon } from '../services'
 import { useDebounce } from '../hooks/useDebounce'
-import { formatColor } from '../utils/'
+import { formatColor, visualizePokemons } from '../utils'
 import Card from '../components/Card/Card'
 import Loading from '../components/Loading/Loading'
 import Border from '../components/Border/Border'
 import Pokeball from '../components/Pokeball/Pokeball'
 
-let loadtime = 0
+interface Types {
+  firstType: string
+  secondType?: string
+}
+
+interface Pokemon {
+  image: string
+  types: Types
+}
 
 const displayScreen = keyframes`
   0% {
@@ -60,29 +68,78 @@ const RightContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-self: flex-end;
-  width: 40%;
+  width: 50%;
 `
 
 const PokemonImage = styled.img`
   display: inline-block;
 `
+const PokedexWrapper = styled.div``
 
-const PokedexScreen: React.FC = () => {
+let loadtime = 0
+let position = 0
+let regionPokemons: any[] = []
+
+const Pokedex: React.FC = () => {
+  const [isClicked, setIsClicked] = useState(false)
   const [pokemons, setPokemons] = useState<any[]>([])
   const [pokemonSprite, setPokemonSprite] = useState('')
   const [firstTypeColor, setFirstTypeColor] = useState('')
   const [secondTypeColor, setSecondTypeColor] = useState('')
-  const [keyDown, setKeyDown] = useState(0)
+  const [keyDown, setKeyDown] = useState(1)
   const [loaded, setLoaded] = useState(false)
-  const [isClicked, setIsClicked] = useState(false)
-
+  const [location] = useState('kanto')
   const startTime = new Date().getTime()
+
+  useEffect(() => {
+    setLoaded(loaded => loadtime > 1000 ? false : loaded)
+  }, [pokemonSprite])
+
+  useEffect(() => {
+    const fetchData = async (): Promise<void> => {
+      let pokemons: any[] = []
+      let errorStatus = false
+      try {
+        pokemons = await fetchPokemons(location)
+      } catch (error) {
+        console.error(error.message)
+        errorStatus = true
+      }
+      regionPokemons = errorStatus ? regionPokemons : pokemons
+    }
+    fetchData()
+  }, [location])
+
+  useEffect(() => {
+    const fetchData = async (): Promise<void> => {
+      let pokemon: Pokemon = { image: '', types: { firstType: '', secondType: '' } }
+      let errorStatus = false
+      try {
+        pokemon = await fetchTargetPokemon(keyDown)
+      } catch (error) {
+        console.error(error.message)
+        errorStatus = true
+      }
+
+      !errorStatus && backgroundColorsHandler(pokemon.types.firstType, pokemon.types?.secondType)
+
+      setPokemonSprite(current => errorStatus ? current : pokemon.image)
+
+      const data = visualizePokemons(regionPokemons, position)
+      setPokemons(data)
+    }
+    fetchData()
+  }, [keyDown])
 
   const checkKey = (e: KeyboardEvent): void => {
     if (e.key === 'ArrowUp') {
-      setKeyDown(keyDown === 0 ? keyDown : keyDown - 1)
+      setKeyDown(state => state === 1 ? state : state - 1)
+      position = position === 0 ? position : position - 1
     } else if (e.key === 'ArrowDown') {
-      setKeyDown(keyDown + 1)
+      if (position < regionPokemons.length - 1) {
+        setKeyDown(state => state + 1)
+        position = position + 1
+      }
     }
   }
 
@@ -95,32 +152,6 @@ const PokedexScreen: React.FC = () => {
     setLoaded(true)
   }
 
-  useEffect(() => {
-    setLoaded(loaded => loadtime > 1000 ? false : loaded)
-  }, [pokemonSprite])
-
-  useEffect(() => {
-    const fetchData = async (): Promise<void> => {
-      const res = await fetchPokemons(keyDown)
-      const length = res.length
-      let pokemonPosition = 0
-
-      if (length >= 8 && length < 16) {
-        pokemonPosition = length - 8
-      } else if (length >= 16) {
-        pokemonPosition = 8
-      }
-
-      const pokemon = res[pokemonPosition]
-
-      backgroundColorsHandler(pokemon.types[0].type.name, pokemon.types[1]?.type.name)
-
-      setPokemonSprite(pokemon.sprites.front_default)
-      setPokemons(res)
-    }
-    fetchData()
-  }, [keyDown])
-
   const backgroundColorsHandler = (firstType: string, secondType?: string): void => {
     const firstColor = formatColor(firstType)
     const secondColor = secondType && formatColor(secondType)
@@ -129,20 +160,47 @@ const PokedexScreen: React.FC = () => {
     setSecondTypeColor(actualColor => secondColor ?? actualColor)
   }
 
-  const styleContainers = (index: number): Object => {
-    const initial = pokemons.length - 8
+  const styleContainer = (): Object => {
+    return {
+      alignSelf: position > regionPokemons.length - 8
+      // checks if the position is on the last 8 pokemons
+        ? 'flex-start'
+        // if is in, the container is at the top
+        : 'flex-end'
+        // if isn't, the container is at the bottom
+    }
+  }
+
+  const styleCards = (index: number): Object => {
+    // styles every card rendered
+    const selectedCard = position > regionPokemons.length - 8
+    // checks if the position is on the last 8 pokemons
+      ? 7
+      // if is in, the container is at the top and the selected card is always the seventh
+      : pokemons.length - 8
+      // if isn't, the container is at the bottom, the card selected is between one and seven depending on the size of the array
+
     let styles = {}
 
-    if (index === initial) {
+    if (index === selectedCard) {
+      // this is the selected card
       styles = {
         transform: 'scale(1.1)',
-        marginLeft: -1 * Math.pow(index - initial, 2),
+        marginLeft: Math.pow(index - selectedCard, 2),
         background: 'rgb(235, 230, 150)'
       }
     } else {
       styles = {
-        marginLeft: -1 * Math.pow(index - initial, 2),
-        background: `rgb(235, 230, 150, ${index < initial ? `0.${index + 9 - initial}` : 1 - (0.085 - (initial * 0.005)) * index})`
+        marginLeft: Math.pow(index - selectedCard, 2),
+        background: `rgb(235, 230, 150,
+          ${index < selectedCard
+            // fadeout the cards that aren't selected
+            ? `0.${(index - selectedCard) + 9}`
+            // if x < y, return 0.1 + x⁻¹   example on cascade render:  0.2, 0.3, 0.4... (until the selected card, which is 1)
+            : `0.${(selectedCard - index) + 9}`
+            // if x > y, return 0.9 - x⁻¹   example on cascade render:  0.8, 0.7, 0.6... (until the selected card, which is 1)
+          }
+        )`
       }
     }
     return styles
@@ -154,7 +212,7 @@ const PokedexScreen: React.FC = () => {
 
   return (
     isClicked
-      ? <>
+      ? <PokedexWrapper data-testid='pokedex-wrap'>
           <Border />
           <Screen style={{ background: `linear-gradient(${firstTypeColor}, ${secondTypeColor})` }}>
             <LeftContainer>
@@ -169,19 +227,19 @@ const PokedexScreen: React.FC = () => {
                 </>
               </Card>
             </LeftContainer>
-            <RightContainer>
+            <RightContainer style={styleContainer()}>
               {pokemons.map((pokemon, i) => (
                 <TextCard
-                  style={styleContainers(i)}
+                  style={styleCards(i)}
                   key={pokemon.name}>
                     {pokemon.name}
                 </TextCard>
               ))}
             </RightContainer>
           </Screen>
-        </>
+        </PokedexWrapper>
       : <Pokeball onClick={handleClick}/>
   )
 }
 
-export default PokedexScreen
+export default Pokedex

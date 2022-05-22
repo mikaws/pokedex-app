@@ -1,14 +1,11 @@
-export const fetchPokemons = async (position: number): Promise<any[]> => {
-  const data = []
-  let newPosition = 0
-  if (position > 8) {
-    newPosition = position - 8
-  }
-  const url = 'https://pokeapi.co/api/v2/pokemon/'
-  for (let i = 1; position < 8 ? i <= 8 + position : i <= 16; i++) {
-    const res = await fetch(url + `${(position < 8 ? i : i + newPosition)}`)
-    data.push(await res.json())
-  }
+import { getRangeByRegion } from '../utils'
 
-  return data
+export async function fetchPokemons (region: string): Promise<any[]> {
+  const { limit, offset } = getRangeByRegion(region)
+  const url = `https://pokeapi.co/api/v2/pokemon/?offset=${offset}&limit=${limit}/`
+  const res = await fetch(url)
+    .then(res => res.json())
+    .then(data => data.results)
+    .catch(() => { throw new Error("Couldn't fetch data") })
+  return res
 }
