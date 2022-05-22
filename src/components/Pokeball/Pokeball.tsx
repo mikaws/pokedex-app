@@ -109,9 +109,9 @@ const Pokeball: React.FC<Props> = (props: Props) => {
   const [isClicked, setIsClicked] = useState(false)
 
   const handleClick = async (): Promise<void> => {
-    setIsClicked(!isClicked)
+    setIsClicked(true)
     setTimeout(() => {
-      return props.onClick(isClicked)
+      return props.onClick(true)
     }, 1500)
   }
 

@@ -149,7 +149,7 @@ const PokedexScreen: React.FC = () => {
   }
 
   const handleClick = (click: boolean): void => {
-    setIsClicked(!click)
+    setIsClicked(click)
   }
 
   return (
