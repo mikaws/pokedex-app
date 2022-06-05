@@ -1,6 +1,7 @@
-FROM node:14-alpine
-WORKDIR /usr/pokedex
-COPY package.json ./
+FROM node:16.15.0-buster
+
+WORKDIR /usr/app
+COPY package*.json ./
 
 RUN npm install --silent
 

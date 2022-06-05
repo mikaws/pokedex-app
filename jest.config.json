@@ -1,7 +1,7 @@
 {
   "testPathIgnorePatterns": [
     "/node_modules/",
-    "/dist/"
+    "/build/"
 
   ],
   "setupFilesAfterEnv": [

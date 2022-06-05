@@ -7,7 +7,7 @@
           "esnext"
       ],
       "allowJs": true,
-      "outDir": "./dist/",
+      "outDir": "./build/",
       "baseUrl": "./src",
       "strictNullChecks": true,
       "skipLibCheck": true,

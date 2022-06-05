@@ -1,4 +1,4 @@
-version: '3.7'
+version: '3.8'
 services:
     dev:
         container_name: pokedex
@@ -6,7 +6,7 @@ services:
             context: .
             dockerfile: Dockerfile
         volumes:
-            - '.:/usr/pokedex'
-            - '/usr/pokedex/node_modules'
+          - '.:/usr/app'
+          - '/usr/app/node_modules'
         ports:
             - '8080:8080'
