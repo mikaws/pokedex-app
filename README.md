@@ -1,8 +1,10 @@
 # Pokedex App [WIP]
 
-> Still in development...
+> https://pokedex-webapp-mikaws.vercel.app/
 
----
+
+You can access with the link above, but the app is still under development.
+
 
 ## Getting started
 
