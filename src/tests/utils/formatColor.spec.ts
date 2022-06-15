@@ -1,4 +1,4 @@
-import { formatColor } from '../../utils/'
+import { formatColor } from '@utils'
 
 const pokemonTypes = [
   'normal', 'fire', 'fighting',

@@ -1,9 +1,8 @@
 import { useRef } from 'react'
 
-type CallBackType = (...args: any[]) => void
-type ResultType = CallBackType
+type Debounce = (...args: any[]) => void
 
-export const useDebounce = (fn: CallBackType, delay: number): ResultType => {
+export const useDebounce = (fn: Debounce, delay: number): Debounce => {
   const timeoutRef: any = useRef(null)
 
   const debounceFn = (...args: any[]): void => {

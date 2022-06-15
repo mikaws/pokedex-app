@@ -1,22 +1,13 @@
 import React, { useState, useEffect } from 'react'
 import styled, { keyframes } from 'styled-components'
-import { fetchPokemons, fetchTargetPokemon } from '../services'
-import { useDebounce } from '../hooks/useDebounce'
-import { formatColor, visualizePokemons } from '../utils'
-import Card from '../components/Card/Card'
-import Loading from '../components/Loading/Loading'
-import Border from '../components/Border/Border'
-import Pokeball from '../components/Pokeball/Pokeball'
-
-interface Types {
-  firstType: string
-  secondType?: string
-}
-
-interface Pokemon {
-  image: string
-  types: Types
-}
+import { fetchPokemons, fetchTargetPokemon } from '@services'
+import { formatColor, visualizePokemons } from '@utils'
+import { useDebounce } from '@hooks/useDebounce'
+import Card from '@components/Card/Card'
+import Loading from '@components/Loading/Loading'
+import Border from '@components/Border/Border'
+import Pokeball from '@components/Pokeball/Pokeball'
+import { Pokemon } from 'src/@types/Pokemon'
 
 const displayScreen = keyframes`
   0% {

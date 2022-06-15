@@ -7,8 +7,9 @@
           "esnext"
       ],
       "allowJs": true,
-      "outDir": "./build/",
-      "baseUrl": "./src",
+      "outDir": "./build",
+      "rootDir": "./src",
+      "baseUrl": ".",
       "strictNullChecks": true,
       "skipLibCheck": true,
       "esModuleInterop": true,
@@ -22,7 +23,15 @@
       "isolatedModules": true,
       "useUnknownInCatchVariables": false,
       "noEmit": false,
-      "jsx": "react-jsx"
+      "jsx": "react-jsx",
+      "paths": {
+        "@utils": ["./src/utils/index.ts"],
+        "@services": ["./src/services/index.ts"],
+        "@components/*": ["./src/components/*"],
+        "@hooks/*": ["./src/hooks/*"],
+        "@pages/*": ["./src/pages/*"],
+        "@types/*": ["src/@types/*"]
+      }
   },
   "include": [
     "src/**/*"

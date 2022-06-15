@@ -2,6 +2,6 @@ export interface StyleProps {
   isClicked: boolean
 }
 
-interface PokeballProps {
+export interface PokeballProps {
   onClick: (click: boolean) => void
 }

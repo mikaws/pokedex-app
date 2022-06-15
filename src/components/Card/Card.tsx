@@ -1,9 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-
-interface Props {
-  children?: JSX.Element
-}
+import { Props } from 'src/@types/Props'
 
 const CardBorder = styled.div`
   width: 150px;

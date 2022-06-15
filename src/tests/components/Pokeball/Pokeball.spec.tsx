@@ -1,6 +1,6 @@
 import React from 'react'
 import { fireEvent, render } from '@testing-library/react'
-import Pokeball from '../../../components/Pokeball/Pokeball'
+import Pokeball from '@components/Pokeball/Pokeball'
 
 jest.useFakeTimers()
 jest.spyOn(global, 'setTimeout')

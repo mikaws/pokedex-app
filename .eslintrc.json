@@ -3,18 +3,32 @@
   "settings": {
     "react": {
       "version": "detect"
+    },
+    "import/resolver": {
+        "typescript": {
+            "map": [
+              ["@services", "./src/services"],
+              ["@components", "./src/components"],
+              ["@hooks", "./src/hooks"],
+              ["@utils", "./src/utils"],
+              ["@types", "./src/@types"]
+            ],
+            "extensions": [".ts", ".js",".json", ".d.ts"]
+        }
     }
   },
   "parser": "@typescript-eslint/parser",
   "plugins": [
-    "@typescript-eslint"
+    "@typescript-eslint",
+    "import"
   ],
   "extends": [
     "standard-with-typescript",
     "plugin:react/recommended"
   ],
   "parserOptions": {
-    "project": "./tsconfig.json"
+    "project": "./tsconfig.json",
+    "tsconfigRootDir": "./"
   },
   "rules": {
     "@typescript-eslint/strict-boolean-expressions": "off",

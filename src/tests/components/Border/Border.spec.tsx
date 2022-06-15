@@ -1,6 +1,6 @@
 import React from 'react'
 import { render } from '@testing-library/react'
-import PokedexBorder from '../../../components/Border/Border'
+import PokedexBorder from '@components/Border/Border'
 
 describe('PokedexBorder component', () => {
   it('should render correctly', () => {

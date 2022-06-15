@@ -1,12 +1,4 @@
-interface Types {
-  firstType: string
-  secondType?: string
-}
-
-interface Pokemon {
-  image: string
-  types: Types
-}
+import { Pokemon } from 'src/@types/Pokemon'
 
 export async function fetchTargetPokemon (id: number): Promise<Pokemon> {
   const url = `https://pokeapi.co/api/v2/pokemon/${id}`

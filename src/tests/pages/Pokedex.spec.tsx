@@ -1,16 +1,16 @@
 import React from 'react'
 import { render, fireEvent } from '@testing-library/react'
 import Pokedex from '../../pages/Pokedex'
-import { fetchPokemons, fetchTargetPokemon } from '../../services'
+import { fetchPokemons, fetchTargetPokemon } from '@services'
 
-jest.mock('../../services/fetchPokemons.ts', () => ({
+jest.mock('@services/fetchPokemons.ts', () => ({
   __esModule: true,
   fetchPokemons: jest.fn().mockImplementation(() => {
     return [{ name: 'bulbasaur', url: 'bulbasaur-url' }]
   })
 }))
 
-jest.mock('../../services/fetchTargetPokemon.ts', () => ({
+jest.mock('@services/fetchTargetPokemon.ts', () => ({
   __esModule: true,
   fetchTargetPokemon: jest.fn().mockImplementation(() => {
     return {

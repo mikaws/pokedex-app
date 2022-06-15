@@ -1,7 +1,4 @@
-interface Range {
-  limit: number
-  offset: number
-}
+import { Range } from 'src/@types/Range'
 
 export const getRangeByRegion = (region: string): Range => {
   switch (region) {

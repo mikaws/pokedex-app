@@ -1,4 +1,4 @@
-import { fetchPokemons } from '../../services/fetchPokemons'
+import { fetchPokemons } from '@services'
 
 const globalRef = global
 

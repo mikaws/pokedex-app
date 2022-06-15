@@ -1,4 +1,4 @@
-import { getRangeByRegion } from '../../utils/'
+import { getRangeByRegion } from '@utils'
 
 const regions = [
   'kanto', 'johto', 'hoenn',

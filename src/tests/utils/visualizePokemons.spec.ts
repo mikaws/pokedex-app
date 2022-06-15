@@ -1,4 +1,4 @@
-import { visualizePokemons } from '../../utils'
+import { visualizePokemons } from '@utils'
 
 const pokemons = [
   { name: 'bulbasaur', url: 'fake_url_1' },

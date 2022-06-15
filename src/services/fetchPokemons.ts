@@ -1,4 +1,4 @@
-import { getRangeByRegion } from '../utils'
+import { getRangeByRegion } from '@utils'
 
 export async function fetchPokemons (region: string): Promise<any[]> {
   const { limit, offset } = getRangeByRegion(region)

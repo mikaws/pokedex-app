@@ -1,13 +1,6 @@
 import React, { useState } from 'react'
 import styled, { keyframes } from 'styled-components'
-
-interface StyleProps {
-  isClicked: boolean
-}
-
-interface Props {
-  onClick: (click: boolean) => void
-}
+import { PokeballProps, StyleProps } from 'src/@types/Pokeball'
 
 const spandAndRotate = keyframes`
   0% {
@@ -105,7 +98,7 @@ const Button = styled.div`
   }
 `
 
-const Pokeball: React.FC<Props> = (props: Props) => {
+const Pokeball: React.FC<PokeballProps> = (props: PokeballProps) => {
   const [isClicked, setIsClicked] = useState(false)
 
   const handleClick = async (): Promise<void> => {
