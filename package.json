@@ -7,7 +7,6 @@
     "dev": "webpack-dev-server --mode development --config webpack.config.js --open",
     "test": "jest --config jest.config.json --silent",
     "coverage": "npm run test --coverage",
-    "prepare": "husky install",
     "build": "webpack --mode production --config webpack.config.js"
   },
   "devDependencies": {
@@ -35,9 +34,7 @@
     "eslint-plugin-react": "^7.29.2",
     "git-commit-msg-linter": "^4.1.0",
     "html-webpack-plugin": "^5.5.0",
-    "husky": "^7.0.4",
     "jest": "^27.5.1",
-    "lint-staged": "^12.3.4",
     "style-loader": "^3.3.1",
     "ts-jest": "^27.1.4",
     "ts-loader": "^9.2.6",
