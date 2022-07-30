@@ -214,6 +214,8 @@ const Pokedex: React.FC = () => {
                     style={!loaded ? { display: 'none' } : {}}
                     src={pokemonSprite}
                     alt='Pokemon'
+                    width={95}
+                    height={95}
                     onLoad={doneLoading}/>
                 </>
               </Card>

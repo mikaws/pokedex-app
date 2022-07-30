@@ -100,12 +100,18 @@ const Button = styled.div`
 
 const Pokeball: React.FC<PokeballProps> = (props: PokeballProps) => {
   const [isClicked, setIsClicked] = useState(false)
+  let awaitRender = false
 
-  const handleClick = async (): Promise<void> => {
-    setIsClicked(true)
-    setTimeout(() => {
-      return props.onClick(true)
-    }, 1500)
+  const handleClick = (): void => {
+    if (!awaitRender) {
+      awaitRender = true
+
+      setIsClicked(true)
+
+      setTimeout(() => {
+        return props.onClick(true)
+      }, 1500)
+    }
   }
 
   return (
@@ -114,7 +120,7 @@ const Pokeball: React.FC<PokeballProps> = (props: PokeballProps) => {
         <ButtonOutline>
           <Button
             data-testid='pokeball-button'
-            onClick={async () => await handleClick()}/>
+            onClick={() => handleClick()}/>
         </ButtonOutline>
       </Content>
   )

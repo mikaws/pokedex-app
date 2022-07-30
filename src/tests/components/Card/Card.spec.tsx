@@ -7,7 +7,12 @@ describe('Card component', () => {
   it('should render correctly image', () => {
     const { getByRole, getByTestId } = render(
       <Card>
-        <img src='https://pokeapi/sprites/pokemon/1.png' alt='Pokemon' />
+        <img
+          src='https://pokeapi/sprites/pokemon/1.png'
+          alt='Pokemon'
+          width={95}
+          height={95}
+        />
       </Card>
     )
     expect(getByTestId('content-wrapper').childElementCount).toBe(1)
