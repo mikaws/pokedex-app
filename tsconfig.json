@@ -8,7 +8,7 @@
       ],
       "allowJs": true,
       "outDir": "./build",
-      "rootDir": "./src",
+      "rootDir": "./",
       "baseUrl": ".",
       "strictNullChecks": true,
       "skipLibCheck": true,
@@ -34,6 +34,7 @@
       }
   },
   "include": [
-    "src/**/*"
+    "src/**/*",
+    "./index.tsx"
   ]
 }
