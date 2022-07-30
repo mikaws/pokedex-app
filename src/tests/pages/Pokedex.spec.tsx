@@ -23,6 +23,15 @@ jest.mock('@services/fetchTargetPokemon.ts', () => ({
   })
 }))
 
+beforeEach(() => {
+  jest.useFakeTimers()
+})
+
+afterEach(() => {
+  jest.runOnlyPendingTimers()
+  jest.useRealTimers()
+})
+
 describe('Pokedex page', () => {
   it('should render the pokedex when button is clicked', async () => {
     const { getByTestId, findByTestId } = render(
