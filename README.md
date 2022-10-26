@@ -12,13 +12,13 @@ You can access with the link above, but the app is still under development.
 
 ### Development
 
-- Run the follow command:
+- Run the follow command to build and start your local server:
 ```bash
  sudo docker-compose up -d --build
 ```
 - Access http://localhost:8080
 
-- To stop, run the follow command:
+- To stop and remove the images and containers, run the follow command:
 ```bash
  sudo docker-compose down -v --rmi local --remove-orphans
 ```
@@ -27,13 +27,13 @@ You can access with the link above, but the app is still under development.
 
 ### Production
 
-- Run the follow command:
+- Run the follow command to build and start your local server:
 ```bash
  sudo docker-compose -f docker-compose-prod.yml up -d --build && sudo docker image prune -f
 ```
 - Access http://localhost:3000
 
-- To stop, run the follow command:
+- To stop and remove the images and containers, run the follow command:
 ```bash
  sudo docker-compose down -v --rmi local --remove-orphans
 ```
