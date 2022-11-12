@@ -77,7 +77,7 @@ const Pokedex: React.FC = () => {
   const [pokemonSprite, setPokemonSprite] = useState('')
   const [firstTypeColor, setFirstTypeColor] = useState('')
   const [secondTypeColor, setSecondTypeColor] = useState('')
-  const [keyDown, setKeyDown] = useState(1)
+  const [keyUp, setKeyUp] = useState(1)
   const [loaded, setLoaded] = useState(false)
   const [location] = useState('kanto')
   const startTime = new Date().getTime()
@@ -106,7 +106,7 @@ const Pokedex: React.FC = () => {
       let pokemon: Pokemon = { image: '', types: { firstType: '', secondType: '' } }
       let errorStatus = false
       try {
-        pokemon = await fetchTargetPokemon(keyDown)
+        pokemon = await fetchTargetPokemon(keyUp)
       } catch (error) {
         console.error(error.message)
         errorStatus = true
@@ -120,15 +120,15 @@ const Pokedex: React.FC = () => {
       setPokemons(data)
     }
     fetchData()
-  }, [keyDown])
+  }, [keyUp])
 
   const checkKey = (e: KeyboardEvent): void => {
     if (e.key === 'ArrowUp') {
-      setKeyDown(state => state === 1 ? state : state - 1)
+      setKeyUp(state => state === 1 ? state : state - 1)
       position = position === 0 ? position : position - 1
     } else if (e.key === 'ArrowDown') {
       if (position < regionPokemons.length - 1) {
-        setKeyDown(state => state + 1)
+        setKeyUp(state => state + 1)
         position = position + 1
       }
     }
