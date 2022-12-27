@@ -1,40 +1,31 @@
 {
   "compilerOptions": {
-      "target": "es5",
-      "lib": [
-          "dom",
-          "dom.iterable",
-          "esnext"
-      ],
-      "allowJs": true,
-      "outDir": "./build",
-      "rootDir": "./",
-      "baseUrl": ".",
-      "strictNullChecks": true,
-      "skipLibCheck": true,
-      "esModuleInterop": true,
-      "allowSyntheticDefaultImports": true,
-      "strict": true,
-      "forceConsistentCasingInFileNames": true,
-      "noFallthroughCasesInSwitch": true,
-      "module": "esnext",
-      "moduleResolution": "node",
-      "resolveJsonModule": true,
-      "isolatedModules": true,
-      "useUnknownInCatchVariables": false,
-      "noEmit": false,
-      "jsx": "react-jsx",
-      "paths": {
-        "@utils": ["./src/utils/index.ts"],
-        "@services": ["./src/services/index.ts"],
-        "@components/*": ["./src/components/*"],
-        "@hooks/*": ["./src/hooks/*"],
-        "@pages/*": ["./src/pages/*"],
-        "@types/*": ["src/@types/*"]
-      }
+    "target": "ESNext",
+    "useDefineForClassFields": true,
+    "lib": ["DOM", "DOM.Iterable", "ESNext"],
+    "allowJs": false,
+    "strictNullChecks": true,
+    "skipLibCheck": true,
+    "esModuleInterop": false,
+    "allowSyntheticDefaultImports": true,
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "module": "ESNext",
+    "moduleResolution": "Node",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true,
+    "jsx": "react-jsx",
+    "paths": {
+      "@utils": ["./src/utils/index.ts"],
+      "@services": ["./src/services/index.ts"],
+      "@components/*": ["./src/components/*"],
+      "@hooks/*": ["./src/hooks/*"],
+      "@pages/*": ["./src/pages/*"],
+      "@styles/*": ["./src/styles/*"],
+      "src/@types/*": ["./src/@types/*"]
+    }
   },
-  "include": [
-    "src/**/*",
-    "./index.tsx"
-  ]
+  "include": ["src"],
+  "references": [{ "path": "./tsconfig.node.json" }]
 }

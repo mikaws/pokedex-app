@@ -69,7 +69,7 @@ describe('Pokedex page', () => {
   })
 
   it('should catch fetchPokemons error', async () => {
-    jest.unmock('../../services/fetchPokemons.ts');
+    jest.unmock('@services/fetchPokemons.ts');
     (fetchPokemons as jest.Mock).mockImplementation(() => {
       throw new Error('error')
     })
@@ -92,7 +92,7 @@ describe('Pokedex page', () => {
   })
 
   it('should catch fetchTargetPokemons error', async () => {
-    jest.unmock('../../services/fetchTargetPokemon.ts');
+    jest.unmock('@services/fetchTargetPokemon.ts');
     (fetchTargetPokemon as jest.Mock).mockImplementation(() => {
       throw new Error('error')
     })

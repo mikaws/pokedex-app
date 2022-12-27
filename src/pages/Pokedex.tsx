@@ -5,7 +5,6 @@ import { formatColor, visualizePokemons } from '@utils'
 import { useDebounce } from '@hooks/useDebounce'
 import Card from '@components/Card/Card'
 import Loading from '@components/Loading/Loading'
-import Border from '@components/Border/Border'
 import Pokeball from '@components/Pokeball/Pokeball'
 import { Pokemon } from 'src/@types/Pokemon'
 
@@ -20,52 +19,123 @@ const displayScreen = keyframes`
   }
 `
 
+const openPokeballToLeft = keyframes`
+  0% {
+    transform: translateX(100%);
+  }
+  100% {
+    transform: translateX(0);
+  }
+`
+
+const openPokeballToRight = keyframes`
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(0);
+  }
+`
+
+const PokedexWrapper = styled.div`
+  display: flex;
+  justify-content: center; 
+  align-items: center;
+  height: 100vh;
+  width: 100vw;
+`
+
+const LeftBorder = styled.div`
+  animation: ${openPokeballToLeft} 2s;
+  display: flex;
+  align-items: center;
+  justify-content: right;
+  width: 25rem;
+  height: 30rem;
+  background: var(--pokeball-inactive);
+  background-image: linear-gradient(to top left, var(--pokeball-center-inactive), rgb(159, 83, 197));
+  border-radius: 40rem 0 0 40rem;
+  box-shadow: inset 0 0 0.5px 0.2px #3b0ca0;
+  margin-left: 3rem;
+`
+
+const LeftBorderOutline = styled.div`
+  width: 35%;
+  height: 35%;
+  margin: 0 -1px;
+  background: var(--background);
+  border-radius: 14.5rem 0 0 14.5rem;
+`
+
+const RightBorder = styled.div`
+  animation: ${openPokeballToRight} 2s;
+  display: flex;
+  align-items: center;
+  justify-content: left;
+  width: 25rem;
+  height: 30rem;
+  background: var(--pokeball-inactive);
+  background-image: linear-gradient(to top left, var(--pokeball-center-inactive), rgb(159, 83, 197));
+  border-radius: 0 40rem 40rem 0;
+  box-shadow: inset 0 0 0.5px 0.2px #3b0ca0;
+  margin-right: 3rem;
+`
+
+const RightBorderOutline = styled.div`
+  width: 35%;
+  height: 35%;
+  margin: 0 -1px;
+  background: var(--background);
+  border-radius: 0 14.5rem 14.5rem 0;
+`
+
 const TextCard = styled.div`
-  padding: 7.5px;
-  margin: 5px;
-  width: 150px;
+  display: flex;
+  justify-content: center;
+  width: 9.5rem;
+  padding: 0.1rem;
+  margin: 0.3rem;
   border-radius: 5px;
-  text-align: center;
   background-color: black;
   cursor: pointer;
-
   &:hover {
     transform: scale(1.05);
   }
 `
 
 const Screen = styled.div` 
-  position: absolute;
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 10px 0 0 30px;
-  margin: 0px -125px;
-  width: 1000px;
-  height: 645px;
-  border-radius: 10px;
+  width: 100%;
+  height: 30rem;
+  border-radius: 0.8rem;
   background: linear-gradient(90deg, #a198e5, #dbacac 80%, #3aaaaa);
   box-shadow: inset 0 0 1px 0.5px #3b0ca0;
   animation: ${displayScreen} 2s;
-  overflow-y: hidden;
+  margin: 0 1rem 0 1rem;
+  z-index: 1 !important;
 `
 
-const LeftContainer = styled.div` 
-  margin: 200px;
+const LeftContainer = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: right;
+  margin: 1rem;
   width: 50%;
 `
 
 const RightContainer = styled.div`
   display: flex;
+  align-items: center;
+  justify-content: center;
   flex-direction: column;
-  align-self: flex-end;
   width: 50%;
 `
 
 const PokemonImage = styled.img`
   display: inline-block;
 `
-const PokedexWrapper = styled.div``
 
 let loadtime = 0
 let position = 0
@@ -93,7 +163,7 @@ const Pokedex: React.FC = () => {
       try {
         pokemons = await fetchPokemons(location)
       } catch (error) {
-        console.error(error.message)
+        console.error(error)
         errorStatus = true
       }
       regionPokemons = errorStatus ? regionPokemons : pokemons
@@ -108,7 +178,7 @@ const Pokedex: React.FC = () => {
       try {
         pokemon = await fetchTargetPokemon(keyUp)
       } catch (error) {
-        console.error(error.message)
+        console.error(error)
         errorStatus = true
       }
 
@@ -176,8 +246,7 @@ const Pokedex: React.FC = () => {
     if (index === selectedCard) {
       // this is the selected card
       styles = {
-        transform: 'scale(1.1)',
-        marginLeft: Math.pow(index - selectedCard, 2),
+        marginLeft: Math.pow(index - selectedCard, 2) - 4,
         background: 'rgb(235, 230, 150)'
       }
     } else {
@@ -204,7 +273,9 @@ const Pokedex: React.FC = () => {
   return (
     isClicked
       ? <PokedexWrapper data-testid='pokedex-wrap'>
-          <Border />
+          <LeftBorder>
+            <LeftBorderOutline/>
+          </LeftBorder>
           <Screen style={{ background: `linear-gradient(${firstTypeColor}, ${secondTypeColor})` }}>
             <LeftContainer>
               <Card>
@@ -214,8 +285,8 @@ const Pokedex: React.FC = () => {
                     style={!loaded ? { display: 'none' } : {}}
                     src={pokemonSprite}
                     alt='Pokemon'
-                    width={95}
-                    height={95}
+                    width={96}
+                    height={96}
                     onLoad={doneLoading}/>
                 </>
               </Card>
@@ -230,6 +301,9 @@ const Pokedex: React.FC = () => {
               ))}
             </RightContainer>
           </Screen>
+          <RightBorder>
+            <RightBorderOutline/>
+          </RightBorder>
         </PokedexWrapper>
       : <Pokeball onClick={handleClick}/>
   )

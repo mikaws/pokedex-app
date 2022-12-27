@@ -1,7 +1,7 @@
 import React, { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
-import GlobalStyles from './src/styles/GlobalStyles'
-import App from './src/App'
+import GlobalStyles from '@styles/GlobalStyles'
+import App from './App'
 
 const container = document.getElementById('root') as HTMLElement
 const root = createRoot(container)

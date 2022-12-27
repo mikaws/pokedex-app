@@ -21,9 +21,9 @@ const CircularLoading = styled.div`
   &:after {
     content: '';
     display: block;
-    width: 65px;
-    height: 65px;
-    margin: 10px;
+    width: 4rem;
+    height: 4rem;
+    margin: 0.8rem;
     border-radius: 50%;
     border: 6px solid #fff;
     border-color: #fff transparent #fff transparent;

@@ -24,8 +24,8 @@ const Content = styled.div<StyleProps>`
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 350px;
-  width: 350px;
+  width: 18rem;
+  height: 18rem;
   border-radius: 50%;
   background: linear-gradient(to top left, var(--pokeball-center-inactive), rgb(159, 83, 197));
   box-shadow: inset 0 0 1px 1px var(--background);
@@ -64,8 +64,10 @@ const Content = styled.div<StyleProps>`
 
 const Line = styled.div`
   position: absolute;
-  width: 110%;
-  height: 40px;
+  width: 18.2rem;
+  height: 2.5rem;
+  border-top: 50%;
+  border-bottom: 50%;
   background-color: var(--background);
   transform: rotate(36deg);
 `
@@ -74,16 +76,16 @@ const ButtonOutline = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 150px;
-  height: 150px;
+  width: 8rem;
+  height: 8rem;
   position: absolute;
   border-radius: 50%;
   background-color: var(--background);
 
 `
 const Button = styled.div`
-  width: 100px;
-  height: 100px;
+  width: 5rem;
+  height: 5rem;
   position: absolute;
   border-radius: 50%;
   background-color: var(--pokeball-center-inactive);

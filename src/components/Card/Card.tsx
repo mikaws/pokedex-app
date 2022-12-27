@@ -3,7 +3,11 @@ import styled from 'styled-components'
 import { Props } from 'src/@types/Props'
 
 const CardBorder = styled.div`
-  width: 150px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 10rem;
+  height: 10rem;
   padding: 5px;
   border-radius: 10px;
   background:
@@ -19,11 +23,13 @@ const CardBorder = styled.div`
 `
 
 const CardBackground = styled.div`
+  display: flex;
+  justify-content: center;
   align-items: center;
-  width: 140px;
-  height: 140px;
+  width: 9rem;
+  height: 9rem;
   border-radius: 10px;
-  padding: 20px;
+  /* padding: 1.5rem; */
   background:
     repeating-linear-gradient( 
       125deg,

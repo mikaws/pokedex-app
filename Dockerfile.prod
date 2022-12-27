@@ -9,7 +9,6 @@ COPY . .
 
 RUN npm run build
 
-# NGNIX Web Server
 FROM nginx:1.22.0-alpine as prod
 
 COPY --from=build /usr/share/react/build /usr/share/nginx/html
