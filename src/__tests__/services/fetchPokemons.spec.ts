@@ -1,4 +1,5 @@
 import { fetchPokemons } from '@services'
+import { it, describe, vi, expect } from 'vitest'
 
 const globalRef = global
 
@@ -26,7 +27,7 @@ function setupFetchErrorStub (data: any) {
 describe('fetchPokemons function', () => {
   it('Should return pokemons', async () => {
     const fakeData = { results: [{ name: 'pokemon', url: 'https://pokeapi.test/pokemon' }] }
-    globalRef.fetch = jest.fn().mockImplementation(setupFetchStub(fakeData))
+    globalRef.fetch = vi.fn().mockImplementation(setupFetchStub(fakeData))
 
     const res = await fetchPokemons('kanto')
 
@@ -37,7 +38,7 @@ describe('fetchPokemons function', () => {
   })
 
   it('Should return error', async () => {
-    globalRef.fetch = jest.fn().mockImplementation(setupFetchErrorStub('invalid'))
+    globalRef.fetch = vi.fn().mockImplementation(setupFetchErrorStub('invalid'))
 
     const res = await fetchPokemons('kanto').catch(err => err.message)
 

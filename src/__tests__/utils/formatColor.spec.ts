@@ -1,4 +1,5 @@
 import { formatColor } from '@utils'
+import { it, describe, expect } from 'vitest'
 
 const pokemonTypes = [
   'normal', 'fire', 'fighting',

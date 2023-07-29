@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from 'react'
 import styled, { keyframes } from 'styled-components'
 import { fetchPokemons, fetchTargetPokemon } from '@services'
-import { formatColor, visualizePokemons } from '@utils'
+import { formatColor, visualizePokemons, styleCard } from '@utils'
 import { useDebounce } from '@hooks/useDebounce'
 import Card from '@components/Card/Card'
 import Loading from '@components/Loading/Loading'
-import Pokeball from '@components/Pokeball/Pokeball'
 import { Pokemon } from 'src/@types/Pokemon'
 
 const displayScreen = keyframes`
@@ -39,7 +38,7 @@ const openPokeballToRight = keyframes`
 
 const PokedexWrapper = styled.div`
   display: flex;
-  justify-content: center; 
+  justify-content: center;
   align-items: center;
   height: 100vh;
   width: 100vw;
@@ -53,7 +52,11 @@ const LeftBorder = styled.div`
   width: 25rem;
   height: 30rem;
   background: var(--pokeball-inactive);
-  background-image: linear-gradient(to top left, var(--pokeball-center-inactive), rgb(159, 83, 197));
+  background-image: linear-gradient(
+    to top left,
+    var(--pokeball-center-inactive),
+    rgb(159, 83, 197)
+  );
   border-radius: 40rem 0 0 40rem;
   box-shadow: inset 0 0 0.5px 0.2px #3b0ca0;
   margin-left: 3rem;
@@ -75,7 +78,11 @@ const RightBorder = styled.div`
   width: 25rem;
   height: 30rem;
   background: var(--pokeball-inactive);
-  background-image: linear-gradient(to top left, var(--pokeball-center-inactive), rgb(159, 83, 197));
+  background-image: linear-gradient(
+    to top left,
+    var(--pokeball-center-inactive),
+    rgb(159, 83, 197)
+  );
   border-radius: 0 40rem 40rem 0;
   box-shadow: inset 0 0 0.5px 0.2px #3b0ca0;
   margin-right: 3rem;
@@ -103,7 +110,7 @@ const TextCard = styled.div`
   }
 `
 
-const Screen = styled.div` 
+const Screen = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
@@ -135,70 +142,64 @@ const RightContainer = styled.div`
 
 const PokemonImage = styled.img`
   display: inline-block;
+  font-size: 0;
 `
 
-let loadtime = 0
 let position = 0
 let regionPokemons: any[] = []
 
 const Pokedex: React.FC = () => {
-  const [isClicked, setIsClicked] = useState(false)
-  const [pokemons, setPokemons] = useState<any[]>([])
+  const [pokemons, setPokemons] = useState<any[] | null>([])
   const [pokemonSprite, setPokemonSprite] = useState('')
   const [firstTypeColor, setFirstTypeColor] = useState('')
-  const [secondTypeColor, setSecondTypeColor] = useState('')
+  // const [secondTypeColor, setSecondTypeColor] = useState('')
   const [keyUp, setKeyUp] = useState(1)
-  const [loaded, setLoaded] = useState(false)
+  const [isLoading, setIsLoading] = useState(true)
   const [location] = useState('kanto')
-  const startTime = new Date().getTime()
-
-  useEffect(() => {
-    setLoaded(loaded => loadtime > 1000 ? false : loaded)
-  }, [pokemonSprite])
 
   useEffect(() => {
     const fetchData = async (): Promise<void> => {
       let pokemons: any[] = []
-      let errorStatus = false
-      try {
-        pokemons = await fetchPokemons(location)
-      } catch (error) {
-        console.error(error)
-        errorStatus = true
-      }
-      regionPokemons = errorStatus ? regionPokemons : pokemons
+      pokemons = await fetchPokemons(location)
+      regionPokemons = pokemons
     }
     fetchData()
   }, [location])
 
   useEffect(() => {
     const fetchData = async (): Promise<void> => {
-      let pokemon: Pokemon = { image: '', types: { firstType: '', secondType: '' } }
-      let errorStatus = false
-      try {
-        pokemon = await fetchTargetPokemon(keyUp)
-      } catch (error) {
-        console.error(error)
-        errorStatus = true
+      let pokemon: Pokemon = {
+        image: '',
+        types: { firstType: '', secondType: '' }
       }
-
-      !errorStatus && backgroundColorsHandler(pokemon.types.firstType, pokemon.types?.secondType)
-
-      setPokemonSprite(current => errorStatus ? current : pokemon.image)
-
-      const data = visualizePokemons(regionPokemons, position)
-      setPokemons(data)
+      try {
+        setIsLoading(true)
+        pokemon = await fetchTargetPokemon(keyUp)
+        renderPokemonCard(pokemon)
+      } catch (error) {
+        console.error((error as Error).message)
+        setPokemons(null)
+        setIsLoading(false)
+      }
     }
     fetchData()
   }, [keyUp])
 
+  const renderPokemonCard = (pokemon: Pokemon): void => {
+    setPokemonSprite(pokemon.image)
+    backgroundColorsHandler(pokemon.types.firstType, pokemon.types?.secondType)
+    const data = visualizePokemons(regionPokemons, position)
+    setPokemons(data)
+    setIsLoading(false)
+  }
+
   const checkKey = (e: KeyboardEvent): void => {
     if (e.key === 'ArrowUp') {
-      setKeyUp(state => state === 1 ? state : state - 1)
+      setKeyUp((state) => (state === 1 ? state : state - 1))
       position = position === 0 ? position : position - 1
     } else if (e.key === 'ArrowDown') {
       if (position < regionPokemons.length - 1) {
-        setKeyUp(state => state + 1)
+        setKeyUp((state) => state + 1)
         position = position + 1
       }
     }
@@ -208,104 +209,77 @@ const Pokedex: React.FC = () => {
 
   document.onkeydown = (e: KeyboardEvent) => debouncedChange(e)
 
-  const doneLoading = (): void => {
-    loadtime = new Date().getTime() - startTime
-    setLoaded(true)
-  }
-
-  const backgroundColorsHandler = (firstType: string, secondType?: string): void => {
+  const backgroundColorsHandler = (
+    firstType: string,
+    secondType?: string
+  ): void => {
     const firstColor = formatColor(firstType)
-    const secondColor = secondType && formatColor(secondType)
+    // const secondColor = secondType && formatColor(secondType)
 
-    setFirstTypeColor(actualColor => actualColor === firstColor ? actualColor : firstColor)
-    setSecondTypeColor(actualColor => secondColor ?? actualColor)
+    setFirstTypeColor((actualColor) =>
+      actualColor === firstColor ? actualColor : firstColor
+    )
+    // setSecondTypeColor(actualColor => secondColor ?? actualColor)
   }
 
   const styleContainer = (): Object => {
     return {
-      alignSelf: position > regionPokemons.length - 8
-      // checks if the position is on the last 8 pokemons
-        ? 'flex-start'
-        // if is in, the container is at the top
-        : 'flex-end'
-        // if isn't, the container is at the bottom
+      alignSelf:
+        position > regionPokemons.length - 8 // checks if the position is on the last 8 pokemons
+          ? 'flex-start' // if is in, the container is at the top
+          : 'flex-end' // if isn't, the container is at the bottom
     }
-  }
-
-  const styleCards = (index: number): Object => {
-    // styles every card rendered
-    const selectedCard = position > regionPokemons.length - 8
-    // checks if the position is on the last 8 pokemons
-      ? 7
-      // if is in, the container is at the top and the selected card is always the seventh
-      : pokemons.length - 8
-      // if isn't, the container is at the bottom, the card selected is between one and seven depending on the size of the array
-
-    let styles = {}
-
-    if (index === selectedCard) {
-      // this is the selected card
-      styles = {
-        marginLeft: Math.pow(index - selectedCard, 2) - 4,
-        background: 'rgb(235, 230, 150)'
-      }
-    } else {
-      styles = {
-        marginLeft: Math.pow(index - selectedCard, 2),
-        background: `rgb(235, 230, 150,
-          ${index < selectedCard
-            // fadeout the cards that aren't selected
-            ? `0.${(index - selectedCard) + 9}`
-            // if x < y, return 0.1 + x⁻¹   example on cascade render:  0.2, 0.3, 0.4... (until the selected card, which is 1)
-            : `0.${(selectedCard - index) + 9}`
-            // if x > y, return 0.9 - x⁻¹   example on cascade render:  0.8, 0.7, 0.6... (until the selected card, which is 1)
-          }
-        )`
-      }
-    }
-    return styles
-  }
-
-  const handleClick = (click: boolean): void => {
-    setIsClicked(click)
   }
 
   return (
-    isClicked
-      ? <PokedexWrapper data-testid='pokedex-wrap'>
-          <LeftBorder>
-            <LeftBorderOutline/>
-          </LeftBorder>
-          <Screen style={{ background: `linear-gradient(${firstTypeColor}, ${secondTypeColor})` }}>
-            <LeftContainer>
-              <Card>
-                <>
-                  {!loaded && <Loading/>}
-                  <PokemonImage
-                    style={!loaded ? { display: 'none' } : {}}
-                    src={pokemonSprite}
-                    alt='Pokemon'
-                    width={96}
-                    height={96}
-                    onLoad={doneLoading}/>
-                </>
-              </Card>
-            </LeftContainer>
-            <RightContainer style={styleContainer()}>
-              {pokemons.map((pokemon, i) => (
-                <TextCard
-                  style={styleCards(i)}
-                  key={pokemon.name}>
-                    {pokemon.name}
-                </TextCard>
-              ))}
-            </RightContainer>
-          </Screen>
-          <RightBorder>
-            <RightBorderOutline/>
-          </RightBorder>
-        </PokedexWrapper>
-      : <Pokeball onClick={handleClick}/>
+    <PokedexWrapper data-testid="pokedex-wrap">
+      <LeftBorder>
+        <LeftBorderOutline />
+      </LeftBorder>
+      <Screen style={{ background: `linear-gradient(${firstTypeColor})` }}>
+        <LeftContainer>
+          <Card>
+            <>
+              {isLoading
+                ? <Loading />
+                : <PokemonImage
+                  src={pokemonSprite}
+                  alt="Pokemon"
+                  data-testid="pokemon-img"
+                  width={96}
+                  height={96}
+                />
+              }
+            </>
+          </Card>
+        </LeftContainer>
+        <RightContainer data-testid="right-container" style={styleContainer()}>
+          {pokemons
+            ? (
+                pokemons.map((pokemon, i) => (
+              <TextCard
+                data-testid="text-card"
+                style={styleCard(
+                  i,
+                  position,
+                  regionPokemons.length,
+                  pokemons.length
+                )}
+                key={pokemon.name}
+              >
+                {pokemon.name}
+              </TextCard>
+                ))
+              )
+            : (
+            <div data-testid="error"> Error, please refresh this page </div>
+              )}
+        </RightContainer>
+      </Screen>
+      <RightBorder>
+        <RightBorderOutline />
+      </RightBorder>
+    </PokedexWrapper>
   )
 }
 

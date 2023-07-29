@@ -1,4 +1,5 @@
 import { visualizePokemons } from '@utils'
+import { it, describe, expect } from 'vitest'
 
 const pokemons = [
   { name: 'bulbasaur', url: 'fake_url_1' },

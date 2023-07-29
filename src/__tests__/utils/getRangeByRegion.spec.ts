@@ -1,4 +1,5 @@
 import { getRangeByRegion } from '@utils'
+import { it, describe, expect } from 'vitest'
 
 const regions = [
   'kanto', 'johto', 'hoenn',

@@ -4,33 +4,46 @@
   "version": "1.0.0",
   "license": "MIT",
   "description": "A Pokedex application",
-  "type": "module",
   "scripts": {
     "dev": "vite",
-    "test": "jest --config jest.config.json --silent",
-    "coverage": "npm run test --coverage",
-    "build": "tsc && vite build",
-    "prod": "tsc && vite build && vite --mode production",
-    "preview": "vite preview"
+    "preview": "vite preview --port 5050",
+    "test:unit": "vitest --environment jsdom",
+    "test:coverage": "vitest --environment jsdom --coverage",
+    "test:watchAll": "vitest --environment jsdom watch",
+    "typecheck": "vue-tsc --noEmit -p tsconfig.vitest.json --composite false",
+    "build": "tsc -p tsconfig.prod.json && vite build",
+    "prod": "tsc && vite build && vite --mode production"
   },
   "dependencies": {
-    "jest-environment-jsdom": "^29.3.1",
+    "@vitejs/plugin-react": "^3.0.0",
+    "next": "^13.1.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "styled-components": "^5.3.6"
+    "react-router-dom": "^6.6.1",
+    "styled-components": "^5.3.6",
+    "vite": "^4.0.0"
   },
   "devDependencies": {
     "@testing-library/dom": "^8.19.1",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
+    "@testing-library/user-event": "^14.4.3",
     "@types/react": "^18.0.26",
     "@types/react-dom": "^18.0.9",
     "@types/styled-components": "^5.1.26",
-    "@vitejs/plugin-react": "^3.0.0",
+    "@vitest/coverage-c8": "^0.26.3",
+    "c8": "^7.12.0",
+    "eslint": "^8.20.0",
+    "eslint-config-standard-with-typescript": "^22.0.0",
+    "eslint-import-resolver-typescript": "^3.3.0",
+    "eslint-plugin-import": "^2.26.0",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^6.0.0",
+    "eslint-plugin-react": "^7.30.1",
     "git-commit-msg-linter": "^4.5.0",
-    "jest": "^29.3.1",
-    "ts-jest": "^29.0.3",
+    "jsdom": "^20.0.3",
+    "prettier": "^2.8.1",
     "typescript": "^4.9.3",
-    "vite": "^4.0.0"
+    "vitest": "^0.26.3"
   }
 }
