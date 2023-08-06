@@ -6,7 +6,7 @@ import {
 } from 'react-router-dom'
 
 const Intro = React.lazy(() => import('./pages/Intro'))
-const Home = React.lazy(() => import('./pages/Pokedex'))
+const Home = React.lazy(() => import('./pages/Home'))
 
 const App: React.FC = () => {
   return (
@@ -24,7 +24,7 @@ const App: React.FC = () => {
         index
         path="/home"
         element={
-          <React.Suspense fallback={<>...</>}>
+          <React.Suspense fallback={<></>}>
             <Home />
           </React.Suspense>
         }

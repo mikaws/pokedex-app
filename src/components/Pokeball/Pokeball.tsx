@@ -117,14 +117,14 @@ const Pokeball: React.FC<PokeballProps> = (props: PokeballProps) => {
   }
 
   return (
-      <Content data-testid='pokeball-wrap' isClicked={isClicked}>
-        <Line />
-        <ButtonOutline>
-          <Button
-            data-testid='pokeball-button'
-            onClick={() => handleClick()}/>
-        </ButtonOutline>
-      </Content>
+    <Content data-testid='pokeball-content' isClicked={isClicked}>
+      <Line />
+      <ButtonOutline>
+        <Button
+          data-testid='pokeball-button'
+          onClick={() => handleClick()}/>
+      </ButtonOutline>
+    </Content>
   )
 }
 
