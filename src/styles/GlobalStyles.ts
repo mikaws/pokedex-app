@@ -26,5 +26,17 @@ const GlobalStyles = createGlobalStyle`
     height: 100vh;
     overflow: hidden;
   }
+
+  /* Media query for smaller viewports (potentially indicating zoom) */
+ 
+
+
+
+  @media only screen and (min-width: 1800px) {
+    body {
+      font-size: 26px; /* Adjust as needed for smaller screens */
+    }
+  }
+
 `
 export default GlobalStyles

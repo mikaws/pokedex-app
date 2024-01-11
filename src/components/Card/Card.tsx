@@ -8,7 +8,7 @@ const CardBorder = styled.div`
   align-items: center;
   width: 10rem;
   height: 10rem;
-  padding: 5px;
+  padding: 0.2rem;
   border-radius: 10px;
   background:
     repeating-linear-gradient( 
@@ -20,6 +20,10 @@ const CardBorder = styled.div`
     );
   border: 1px solid #3b0ca0;
   box-shadow: inset 0 0 0.5px 0.2px #3b0ca0;
+  @media (max-width: 400px) {
+    width: 5.5rem;
+    height: 5.5rem;
+  }
 `
 
 const CardBackground = styled.div`
@@ -39,6 +43,10 @@ const CardBackground = styled.div`
       #faa 70%
   );
   border: 1px solid #3c2ca4;
+  @media (max-width: 400px) {
+    width: 5rem;
+    height: 5rem;
+  }
 `
 const Card: React.FC<Props> = ({ children }) => {
   return (

@@ -42,6 +42,16 @@ describe('Home page', () => {
         })
       })
     }))
+    vi.mock('../services/fetchTargetDescription.ts', () => ({
+      __esModule: true,
+      fetchTargetPokemon: vi.fn().mockResolvedValue(() => {
+        return new Promise((resolve) => {
+          resolve({
+            json: () => Promise.resolve(pokeData)
+          })
+        })
+      })
+    }))
     global.fetch = vi.fn().mockResolvedValue(
       new Promise((resolve) => {
         resolve({
@@ -49,7 +59,9 @@ describe('Home page', () => {
             Promise.resolve({
               results: pokes,
               sprites: { front_default: 'pokemon-image' },
-              types: [{ type: { name: 'neutral' } }, { type: { name: 'neutral' } }]
+              types: [{ type: { name: 'neutral' } }, { type: { name: 'neutral' } }],
+              description: 'Monster Plant Pokémon',
+              text: 'While it is young, it uses the nutrients that are\nstored in the seed on its back in order to grow.'
             })
         })
       })
@@ -59,6 +71,7 @@ describe('Home page', () => {
   })
 
   afterEach(() => {
+    vi.resetAllMocks()
     vi.clearAllTimers()
   })
 
@@ -78,6 +91,8 @@ describe('Home page', () => {
       expect(textCards.length).toBe(8)
       const screen = await findByTestId(/pokedex-screen/)
       expect(screen).toHaveStyle({ backgroundColor: 'linear-gradient(#A8A878, #A8A878)' })
+      const pokemonInfo = await findByTestId(/pokemon-info/)
+      expect(pokemonInfo).toBe('')
     })
     fireEvent.keyDown(pokedexWrapper, { key: 'ArrowDown' })
     vi.runAllTimers()

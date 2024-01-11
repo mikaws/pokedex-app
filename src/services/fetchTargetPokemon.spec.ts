@@ -31,7 +31,10 @@ describe('fetchTargetPokemon function', () => {
       types: [
         { type: { name: 'grass' } },
         { type: { name: 'poison' } }
-      ]
+      ],
+      weight: 69,
+      height: 7,
+      id: 1
     }
 
     globalRef.fetch = vi.fn().mockImplementation(setupFetchStub(fakeData))

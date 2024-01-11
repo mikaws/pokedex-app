@@ -7,30 +7,43 @@ import { useDebounce } from '@hooks/useDebounce'
 import React, { useEffect, useState } from 'react'
 import { Pokemon } from 'src/@types/Pokemon'
 import styled from 'styled-components'
-import { fetchPokemons, fetchTargetPokemon } from '@services'
+import {
+  fetchPokemonDescription,
+  fetchPokemons,
+  fetchTargetPokemon
+} from '@services'
 import { formatColor, visualizePokemons } from '@utils'
+import { PokemonDescription } from 'src/@types/PokemonDescription'
 
 const ImageContainer = styled.div`
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: right;
+  justify-content: space-between;
   margin: 1rem;
   width: 50%;
+  font-size: 12px;
+  /* @media (max-width: 600px) {
+    width: 40%;
+  } */
 `
 
 const TextCard = styled.li`
-    display: flex;
-    justify-content: center;
-    width: 20rem;
-    padding: 0.5rem;
-    margin: 1rem;
-    border-radius: 5px;
-    background-color: rgb(255, 249, 172);
-    text-align: justify;
-    font-size: 0.75rem;
-    font-weight: 300;
-    color: black;
+  display: flex;
+  justify-content: center;
+  width: 20rem;
+  padding: 0.5rem;
+  margin: 1rem;
+  border-radius: 5px;
+  background-color: rgb(255, 249, 172);
+  text-align: justify;
+  font-size: 0.75rem;
+  font-weight: 300;
+  color: black;
 `
+
+const Description = styled.div``
+const Information = styled.div``
 
 const Home: React.FC = () => {
   const [pokemons, setPokemons] = useState<any[]>([])
@@ -41,8 +54,11 @@ const Home: React.FC = () => {
   const [secondTypeColor, setSecondTypeColor] = useState<string>('')
   const [keyUp, setKeyUp] = useState<number>(1)
   const [position, setPosition] = useState<number>(0)
-  const [isLoadingFirstRender, setIsLoadingFirstRender] = useState<boolean>(true)
+  const [isLoadingFirstRender, setIsLoadingFirstRender] =
+    useState<boolean>(true)
   const [isLoading, setIsLoading] = useState<boolean>(true)
+  const [description, setDescription] = useState<string>('')
+  const [text, setText] = useState<string>('')
   const location: string = 'kanto'
 
   const debouncedChange = useDebounce(checkKey, 150)
@@ -71,26 +87,44 @@ const Home: React.FC = () => {
   }, [location])
 
   useEffect(() => {
-    (async (): Promise<void> => {
-      try {
-        setIsLoading(true)
-        const targetPokemon = await fetchTargetPokemon(keyUp)
-        renderPokemonCard(targetPokemon as Pokemon)
-      } catch (error) {
-        console.error((error as Error).message)
-        setIsError(true)
-      } finally {
-        setIsLoading(false)
-        setIsLoadingFirstRender(false)
-      }
-    })()
+    updatePokemonList(keyUp)
   }, [regionPokemons, keyUp])
+
+  function updateMainPokemonByPosition (pokemon: { name: string, url: string}): void {
+    const pokemonId = parseInt(pokemon.url.split('/pokemon/')[1].replace('/', ''))
+    if (pokemonId) {
+      setKeyUp(pokemonId)
+      setPosition(pokemonId - 1)
+    }
+  }
+
+  async function updatePokemonList (pokemonId: number): Promise<void> {
+    try {
+      setIsLoading(true)
+      const targetPokemon = await fetchTargetPokemon(pokemonId)
+      const pokemonDescription = await fetchPokemonDescription(pokemonId)
+      renderPokemonCard(targetPokemon as Pokemon)
+      renderPokemonDescription(pokemonDescription)
+    } catch (error) {
+      console.error(error)
+      setIsError(true)
+    } finally {
+      setIsLoading(false)
+      setIsLoadingFirstRender(false)
+    }
+  }
 
   function renderPokemonCard (pokemon: Pokemon): void {
     setPokemonSprite(pokemon.image)
+    console.log(pokemon)
     backgroundColorsHandler(pokemon.types.firstType, pokemon.types?.secondType)
     const pokemonsToVisualize = visualizePokemons(regionPokemons, position)
     setPokemons(pokemonsToVisualize)
+  }
+
+  function renderPokemonDescription (pokemonDescription: PokemonDescription): void {
+    setDescription(pokemonDescription.description)
+    setText(pokemonDescription.text)
   }
 
   function backgroundColorsHandler (
@@ -99,11 +133,10 @@ const Home: React.FC = () => {
   ): void {
     const firstColor = formatColor(firstType)
     const secondColor = secondType && formatColor(secondType)
-
     setFirstTypeColor((actualColor) =>
       actualColor === firstColor ? actualColor : firstColor
     )
-    setSecondTypeColor(actualColor => secondColor ?? actualColor)
+    setSecondTypeColor((actualColor) => secondColor ?? actualColor)
   }
 
   if (isError) {
@@ -120,8 +153,8 @@ const Home: React.FC = () => {
           />
           <TextCard>
             Error! There is a unknown psychic power interfering our
-             communication with the National Pokedex Data Center.
-            Please try again later until we stablish the connection.
+            communication with the National Pokedex Data Center. Please try
+            again later until we stablish the connection.
           </TextCard>
         </>
       </Pokedex>
@@ -129,11 +162,15 @@ const Home: React.FC = () => {
   }
 
   if (isLoadingFirstRender) {
-    return <Pokedex><Loading/></Pokedex>
+    return (
+      <Pokedex>
+        <Loading />
+      </Pokedex>
+    )
   }
 
   return (
-    <Pokedex primaryColor={firstTypeColor} secondaryColor={secondTypeColor} >
+    <Pokedex primaryColor={firstTypeColor} secondaryColor={secondTypeColor}>
       <>
         <ImageContainer>
           <Card>
@@ -145,8 +182,12 @@ const Home: React.FC = () => {
               height={96}
             />
           </Card>
+          <Information data-test-id='pokemon-info'>
+            {text}
+          </Information>
         </ImageContainer>
         <List
+          click={updateMainPokemonByPosition}
           items={pokemons}
           actualPosition={position}
           lastPosition={regionPokemons.length}

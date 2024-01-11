@@ -96,12 +96,13 @@ const Screen = styled.div`
   justify-content: center;
   align-items: center;
   width: 100%;
-  height: 30rem;
+  height: 95%;
   border-radius: 0.8rem;
   background: linear-gradient(90deg, #a198e5, #dbacac 80%, #3aaaaa);
   box-shadow: inset 0 0 1px 0.5px #3b0ca0;
   animation: ${displayScreen} 2s;
-  margin: 0 1rem 0 1rem;
+  /* margin: 0 1rem 0 1rem; */
+  padding: 1rem;
   z-index: 1 !important;
 `
 
