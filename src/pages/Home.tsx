@@ -20,30 +20,66 @@ const ImageContainer = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: space-between;
-  margin: 1rem;
+  margin: 1em;
   width: 50%;
   font-size: 12px;
-  /* @media (max-width: 600px) {
-    width: 40%;
-  } */
+  @media (max-width: 600px) {
+    margin-top: 2rem;
+    flex-direction: row;
+    width: 100%; 
+    align-items: center;
+    justify-content: center;
+    gap: 1em;
+  }
 `
 
-const TextCard = styled.li`
+const TextCardWrapper = styled.div`
+  margin-top: 1rem;
   display: flex;
   justify-content: center;
-  width: 20rem;
+  align-items: center;
+  width: 100%;
+  height: 50%;
+  padding: 0.5em;
+  padding-left: 0.75em;
+  padding-right: 0.75em;
+  border-radius: 10px;
+  background: #57bcf3;
+  border: 1px solid #3f85aa;
+  @media (max-width: 600px) {
+    width: 14em; 
+    height: auto;
+    padding: auto;
+  }
+`
+
+const TextCard = styled.div`
+  position: relative;
+  width: auto;
+  height: auto;
   padding: 0.5rem;
-  margin: 1rem;
   border-radius: 5px;
-  background-color: rgb(255, 249, 172);
-  text-align: justify;
-  font-size: 0.75rem;
+  background-color: #fff;
   font-weight: 300;
   color: black;
 `
 
-const Description = styled.div``
-const Information = styled.div``
+const ErrorTextCard = styled.div`
+  display: flex;
+  justify-content: center;
+  width: 20em;
+  padding: 0.5em;
+  margin: 1em;
+  border-radius: 5px;
+  background-color: rgb(255, 249, 172);
+  text-align: justify;
+  font-size: 0.75em;
+  font-weight: 300;
+  color: black;
+`
+
+const Information = styled.p`
+`
 
 const Home: React.FC = () => {
   const [pokemons, setPokemons] = useState<any[]>([])
@@ -57,7 +93,6 @@ const Home: React.FC = () => {
   const [isLoadingFirstRender, setIsLoadingFirstRender] =
     useState<boolean>(true)
   const [isLoading, setIsLoading] = useState<boolean>(true)
-  const [description, setDescription] = useState<string>('')
   const [text, setText] = useState<string>('')
   const location: string = 'kanto'
 
@@ -90,8 +125,13 @@ const Home: React.FC = () => {
     updatePokemonList(keyUp)
   }, [regionPokemons, keyUp])
 
-  function updateMainPokemonByPosition (pokemon: { name: string, url: string}): void {
-    const pokemonId = parseInt(pokemon.url.split('/pokemon/')[1].replace('/', ''))
+  function updateMainPokemonByPosition (pokemon: {
+    name: string
+    url: string
+  }): void {
+    const pokemonId = parseInt(
+      pokemon.url.split('/pokemon/')[1].replace('/', '')
+    )
     if (pokemonId) {
       setKeyUp(pokemonId)
       setPosition(pokemonId - 1)
@@ -116,14 +156,14 @@ const Home: React.FC = () => {
 
   function renderPokemonCard (pokemon: Pokemon): void {
     setPokemonSprite(pokemon.image)
-    console.log(pokemon)
     backgroundColorsHandler(pokemon.types.firstType, pokemon.types?.secondType)
     const pokemonsToVisualize = visualizePokemons(regionPokemons, position)
     setPokemons(pokemonsToVisualize)
   }
 
-  function renderPokemonDescription (pokemonDescription: PokemonDescription): void {
-    setDescription(pokemonDescription.description)
+  function renderPokemonDescription (
+    pokemonDescription: PokemonDescription
+  ): void {
     setText(pokemonDescription.text)
   }
 
@@ -149,13 +189,13 @@ const Home: React.FC = () => {
             alt="oak-professor"
             width={55}
             height={87}
-            style={{ marginLeft: '2rem' }}
+            style={{ marginLeft: '2em' }}
           />
-          <TextCard>
+          <ErrorTextCard>
             Error! There is a unknown psychic power interfering our
             communication with the National Pokedex Data Center. Please try
             again later until we stablish the connection.
-          </TextCard>
+          </ErrorTextCard>
         </>
       </Pokedex>
     )
@@ -182,9 +222,11 @@ const Home: React.FC = () => {
               height={96}
             />
           </Card>
-          <Information data-test-id='pokemon-info'>
-            {text}
-          </Information>
+          <TextCardWrapper>
+            <TextCard>
+              <Information data-test-id="pokemon-info">{text}</Information>
+            </TextCard>
+          </TextCardWrapper>
         </ImageContainer>
         <List
           click={updateMainPokemonByPosition}

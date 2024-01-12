@@ -9,32 +9,76 @@ interface ListProps {
   click: (pokemon: { name: string, url: string }) => void
 }
 
+const Div = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 50%;
+`
+
 const OrderedList = styled.ol`
   display: flex;
   align-items: center;
   justify-content: space-between;
   flex-direction: column;
-  padding: 1rem;
+  padding: 1em;
   width: 60%;
-  gap: 0.8rem;
+  gap: 0.8em;
   min-height: 55%;
   max-height: 100%;
+  & li:nth-child(1):nth-last-child(5) {
+    margin-top: 12.5em;
+  }
+  & li:nth-child(1):nth-last-child(6) {
+    margin-top: 9.5em;
+  }
+  & li:nth-child(1):nth-last-child(7) {
+    margin-top: 6.5em;
+  }
+  & li:nth-child(1):nth-last-child(8) {
+    margin-top: 3.5em;
+  }
+  & li:nth-child(1):nth-last-child(n + 9) {
+    margin-top: 0em;
+  }
+  @media (max-width: 800px) {
+    margin-top: -1rem;
+    li {
+      margin-top: 0;
+    }
+  }
 `
 
 const Item = styled.li`
   display: flex;
   justify-content: left;
-  width: 12rem;
-  padding: 0.5rem;
+  width: 12em;
+  padding: 0.5em;
   border-radius: 20px 5px 5px 20px;
   /* background-color: black; */
   cursor: pointer;
   &:hover {
     transform: scale(1.05);
   }
-  @media (max-width: 600px) {
-    width: 8rem;
-    font-size: 0.6rem;
+  @media (max-width: 300px) {
+    font-size: 0.8em;
+    gap: 0.2em;
+  }
+
+  @media (max-height: 600px) {
+    font-size: 12px;
+  }
+  @media (max-height: 500px) {
+    font-size: 10px;
+  }
+  @media (max-height: 400px) {
+    font-size: 8px;
+  }
+  @media (max-height: 300px) {
+    font-size: 6px;
+  }
+  @media (max-height: 200px) {
+    font-size: 4px;
   }
 `
 
@@ -42,25 +86,33 @@ const TextContainer = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.5em;
   width: 100%;
-  height: 1.5rem;
+  height: 1.5em;
   @media (max-width: 768px) {
-    gap: 0.25rem;
+    gap: 0.25em;
   }
 `
 
 const Text = styled.p`
   width: auto;
-  /* height: 1rem; */
 `
 
 const PokeballIcon = styled.span`
-  width: 2rem;
-  height: 2rem;
-  border-radius: 50%;
-  background-color: red;
+  width: 2em;
+  height: 2em;
+  border-radius: 1rem;
+  background-color: #462222;
   opacity: 20%;
+  @media (max-width: 600px) {
+    width: 1.5em;
+    height: 1.5em;
+  }
+
+  @media (max-width: 400px) {
+    width: 1em;
+    height: 1em;
+  }
 `
 
 const List: React.FC<ListProps> = ({
@@ -82,22 +134,24 @@ const List: React.FC<ListProps> = ({
     }
   }
   return (
-    <OrderedList data-testid="ordered-list" style={styleContainer()}>
-      {items.map((item, i) => (
-        <Item
-          onClick={() => click(item)}
-          data-testid="text-item"
-          style={styleCard(i, actualPosition, lastPosition, items.length)}
-          key={item.name}
-        >
-          <TextContainer>
-            <PokeballIcon />
-            <Text>{item.url.split('/pokemon/')[1].replace('/', '')}</Text>
-            <Text>{item.name.toUpperCase()}</Text>
-          </TextContainer>
-        </Item>
-      ))}
-    </OrderedList>
+    <Div>
+      <OrderedList data-testid="ordered-list" style={styleContainer()}>
+        {items.map((item, i) => (
+          <Item
+            onClick={() => click(item)}
+            data-testid="text-item"
+            style={styleCard(i, actualPosition, lastPosition, items.length)}
+            key={item.name}
+          >
+            <TextContainer>
+              <PokeballIcon />
+              <Text>{item.url.split('/pokemon/')[1].replace('/', '')}</Text>
+              <Text>{item.name.toUpperCase()}</Text>
+            </TextContainer>
+          </Item>
+        ))}
+      </OrderedList>
+    </Div>
   )
 }
 
