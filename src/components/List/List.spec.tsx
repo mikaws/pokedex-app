@@ -16,7 +16,7 @@ describe('List component', () => {
 
   it('should test if 8 pokemons are rendered on the start of the list', () => {
     const { getByTestId } = render(
-      <List items={pokes.slice(0, 8)} actualPosition={0} lastPosition={256} />
+      <List click={() => {}} items={pokes.slice(0, 8)} actualPosition={0} lastPosition={256} />
     )
 
     const list = getByTestId('ordered-list')
@@ -26,6 +26,7 @@ describe('List component', () => {
   it('should test if 8 pokemons are rendered on the final of the list', () => {
     const { getByTestId } = render(
       <List
+        click={() => {}}
         items={pokes.slice(pokes.length - 8, pokes.length)}
         actualPosition={252}
         lastPosition={256}
