@@ -43,7 +43,8 @@ You can access with the link above, but the app is still under development.
 
 > 1. Add tests ✅
 > 2. Add production scripts ✅
-> 3. Add a container with pokemon info
-> 4. Add filter buttons and search bar
-> 5. Add responsive styles
-> 6. Keep catch'em all
+> 3. Add responsive styles ✅
+> 4. Add a container with pokemon info ✅
+> 5. Add pokemon type labels
+> 6. Add filter buttons and search bar
+> 7. Keep catch'em all
